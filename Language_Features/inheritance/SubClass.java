@@ -5,7 +5,9 @@ public class SubClass extends BaseClass {
     * allow to build solution.
     */
     //super() // Won't fly, BaseClass() is private.
-    super(10); //Voila, BaseClass(int) is public.
+    super(10); //Voila, BaseClass(int) is public. You can't omit that, as java
+    // compiler won't find accessible non-parameterized constructor. Funny thing
+    // it doesn't care at compile time, when base class is abstract, right?
   }
 
   public static class StaticNestedClassSubClass extends BaseClass.InnerSubClass {
