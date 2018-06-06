@@ -1,4 +1,6 @@
-import java.io.*;
+package client;
+
+mport java.io.*;
 import java.net.*;
 
 public class SocketClient implements Runnable{

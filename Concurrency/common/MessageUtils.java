@@ -1,5 +1,11 @@
-import java.net.*;
-import java.io.*;
+package common;
+
+import java.net.Socket;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class MessageUtils {
   public static void sendMessage(Socket socket, String message) throws IOException{
