@@ -1,8 +1,8 @@
 package server;
 
-public class SingleThreadDispatcher implements SocketRequestDispatcher {
+public class SingleThreadDispatcher implements RequestDispatcher {
 
-  public void schedule(SocketRequestProcessor processor) {
+  public void schedule(RequestProcessor processor) {
     processor.process();
   }
 }

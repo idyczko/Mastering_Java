@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
 
-public class SimpleSocketConnectionManager implements SocketConnectionManager {
+public class SimpleSocketConnectionManager implements ConnectionManager {
   ServerSocket serverSocket;
 
   public SimpleSocketConnectionManager(int port, int timeoutMillis) throws IOException{
@@ -12,7 +12,8 @@ public class SimpleSocketConnectionManager implements SocketConnectionManager {
     this.serverSocket.setSoTimeout(timeoutMillis);
   }
 
-  public Socket awaitRequest() throws IOException{
-    return this.serverSocket.accept();
+  @Override
+  public ClientConnection awaitRequest() throws IOException{
+      return new SocketClientConnection(this.serverSocket.accept());
   }
 }

@@ -4,11 +4,12 @@ import common.MessageUtils;
 import java.net.Socket;
 import java.io.IOException;
 
-public class MessageWritingRequestProcessor implements SocketRequestProcessor {
+public class MessageWritingRequestProcessor extends RequestProcessor {
   Socket socket;
 
-  public MessageWritingRequestProcessor(Socket socket) {
-    this.socket = socket;
+  private MessageWritingRequestProcessor(SocketClientConnection clientConnection) {
+    super(clientConnection);
+    this.socket = clientConnection.socket;
   }
 
   public void process() {
@@ -17,7 +18,7 @@ public class MessageWritingRequestProcessor implements SocketRequestProcessor {
 
     try {
       String message = MessageUtils.getMessage(socket);
-      Thread.sleep(1000);
+      //Thread.sleep(1000);
       MessageUtils.sendMessage(socket, "Server: NO, U " + message);
       closeIgnoringException(socket);
     } catch(Exception e) {
@@ -31,6 +32,14 @@ public class MessageWritingRequestProcessor implements SocketRequestProcessor {
         socket.close();
       } catch(IOException ignore) {
       }
+    }
+  }
+
+  public static class MessageWritingRequestProcessorFactory implements RequestProcessorFactory{
+
+    @Override
+    public RequestProcessor produce(ClientConnection clientConnection) {
+      return new MessageWritingRequestProcessor((SocketClientConnection) clientConnection);
     }
   }
 }
