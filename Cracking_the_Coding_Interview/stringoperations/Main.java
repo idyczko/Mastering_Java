@@ -1,12 +1,10 @@
-package stringoperations;
-
 import java.util.Collection;
 import java.util.ArrayList;
 
 public class Main {
 
-    public static void main(Strint[] args) {
-
+    public static void main(String[] args) {
+      Permutations.printAllPermutations(args[0]);
     }
 
     /*Sooooo my first idea was - let's just go through the super string character by character
@@ -16,9 +14,9 @@ public class Main {
     * and we start algorithm from where we have found this character. For storing permutation
     * we could use a cyclic buffer.
     */
-    public static Collection<String> findPermutations(String super, String sub) {
-        ArrayList<String> permutations = new ArrayList()<>; // Type inference
-        char[] superChars = super.toCharArray();
+    public static Collection<String> findPermutations(String sup, String sub) {
+        ArrayList<String> permutations = new ArrayList<>(); // Type inference
+        char[] superChars = sup.toCharArray();
         char[] subChars = sub.toCharArray();
 
         for(int i = 0; i < superChars.length - subChars.length; i++) {
