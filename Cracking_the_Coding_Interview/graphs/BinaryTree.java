@@ -37,7 +37,7 @@ public class BinaryTree {
     Node temp = node.left;
     node.left = node.right;
     node.right = temp;
-    
+
     inverse(node.right);
     inverse(node.left);
   }
