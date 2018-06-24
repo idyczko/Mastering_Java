@@ -4,7 +4,8 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-      Permutations.printAllPermutations(args[0]);
+      //Permutations.printAllPermutations(args[0]);
+      System.out.println(Urlifier.urlify("Well boo-hoo! Great joke!      ", 25));
     }
 
     /*Sooooo my first idea was - let's just go through the super string character by character
