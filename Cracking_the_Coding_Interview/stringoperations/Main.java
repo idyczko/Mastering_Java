@@ -6,6 +6,11 @@ public class Main {
     public static void main(String[] args) {
       //Permutations.printAllPermutations(args[0]);
       System.out.println(Urlifier.urlify("Well boo-hoo! Great joke!      ", 25));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ple"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "paale"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "pile"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "blee"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ale"));
     }
 
     /*Sooooo my first idea was - let's just go through the super string character by character
