@@ -5,15 +5,23 @@ public class Main {
 
     public static void main(String[] args) {
       //Permutations.printAllPermutations(args[0]);
-      // System.out.println(Urlifier.urlify("Well boo-hoo! Great joke!      ", 25));
-      // System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ple"));
-      // System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "paale"));
-      // System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "pile"));
-      // System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "blee"));
-      // System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ale"));
+      System.out.println("Urlifier:");
+      System.out.println(Urlifier.urlify("Well boo-hoo! Great joke!      ", 25));
+      System.out.println("One away:");
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ple"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "paale"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "pile"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "blee"));
+      System.out.println(LevenshteinDistanceCalculator.oneAway("pale", "ale"));
+      System.out.println("All different:");
       System.out.println(CTCIStringUtils.isUniqueChars("Nabuchod"));
       System.out.println(CTCIStringUtils.isUniqueChars("NabuchodonozorZzZ"));
       System.out.println(CTCIStringUtils.isUniqueChars("ZzAaBb"));
+      System.out.println("Permutation of a palindrome:");
+      System.out.println(Permutations.isPermutationOfPalindrome("Octo cat"));
+      System.out.println(Permutations.isPermutationOfPalindrome("Come on conem"));
+      System.out.println(Permutations.isPermutationOfPalindrome("Come on conen"));
+      System.out.println(Permutations.isPermutationOfPalindrome("Comeemoc"));
     }
 
     /*Sooooo my first idea was - let's just go through the super string character by character

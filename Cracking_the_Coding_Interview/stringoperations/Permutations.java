@@ -2,6 +2,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Permutations {
 
+  //No capital letters allowed.
+  public static boolean isPermutationOfPalindrome(String str) {
+    int vector = 0;
+    char[] chars = str.replaceAll(" ", "").toLowerCase().toCharArray();
+
+    for(int i = 0; i < chars.length; i++) {
+      vector ^= (1 << (chars[i] - 'a'));
+    }
+    return (vector & (vector - 1)) == 0;
+  }
+
   public static void printAllPermutations(String str) {
     printAllPermutations(str, "", new AtomicInteger());
   }
