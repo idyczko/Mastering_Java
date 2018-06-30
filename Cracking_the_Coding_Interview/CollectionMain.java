@@ -23,6 +23,8 @@ public class CollectionMain {
     for(int i = 0; i<list.size(); i++) {
       System.out.println(list.get(i));
     }
+    System.out.println("3th to last element found recursively: " + ((LinkedList<Integer>) list).recursiveKthToLast(3));
+    System.out.println("3th to last element found iteratively: " + ((LinkedList<Integer>) list).iterativeKthToLast(3));  
 
     //ArrayList
     List<Integer> list2 = new ArrayList<>();
@@ -53,6 +55,5 @@ public class CollectionMain {
       System.out.println(list2.get(i));
     }
 
-    System.out.println("3th to last element: " + ((LinkedList<Integer>) list).recursiveKthToLast(3));  
   }
 }
