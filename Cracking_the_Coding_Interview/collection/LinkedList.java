@@ -1,5 +1,7 @@
 package collection;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class LinkedList<T> implements List<T> {
   private Node<T> head = new Node<T>();
   private int size = 0;
@@ -61,6 +63,24 @@ public class LinkedList<T> implements List<T> {
 
   public int size() {
     return size;
+  }
+
+  public T recursiveKthToLast(int k) {
+    AtomicInteger atom = new AtomicInteger(k - 1);
+    return recursiveKthToLast(atom, head);
+  }
+
+  private T recursiveKthToLast(AtomicInteger atom, Node<T> node) {
+    if (node.next == null)
+      return null;
+
+    T n = recursiveKthToLast(atom, node.next);
+    atom.decrementAndGet();
+
+    if (atom.intValue() == 0)
+      return node.item;
+
+    return n;
   }
 
   private class Node<T> {

@@ -52,5 +52,7 @@ public class CollectionMain {
     for(int i = 0; i<list2.size(); i++) {
       System.out.println(list2.get(i));
     }
+
+    System.out.println("3th to last element: " + ((LinkedList<Integer>) list).recursiveKthToLast(3));  
   }
 }
