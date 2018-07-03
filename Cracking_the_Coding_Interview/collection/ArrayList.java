@@ -1,4 +1,3 @@
-package collection;
 
 public class ArrayList<T> implements List<T> {
   private static final int GROWTH_FACTOR = 2;

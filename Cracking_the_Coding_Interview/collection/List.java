@@ -1,4 +1,3 @@
-package collection;
 
 public interface List<T> {
 

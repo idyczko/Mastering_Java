@@ -1,4 +1,3 @@
-package collection;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
