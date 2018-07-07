@@ -34,6 +34,20 @@ public class BareBoneLinkedList<T extends Comparable> {
     return node;
   }
 
+  public void partition(T pivot) {
+    BareBoneLinkedList<T> greater = new BareBoneLinkedList<>();
+    Node<T> ptr = head;
+    while(ptr.next != null) {
+      if(ptr.next.item.compareTo(pivot) >= 0) {
+        greater.add(ptr.next.item);
+        ptr.next = ptr.next.next;
+      } else {
+        ptr = ptr.next;
+      }
+    }
+    ptr.next = greater.head.next;
+  }
+
   public void deleteMiddleNode(Node<T> node) {
     if (node == head || node.next == null)
       throw new IllegalArgumentException("No edge nodes allowed for this method - no triple reference pointer!");

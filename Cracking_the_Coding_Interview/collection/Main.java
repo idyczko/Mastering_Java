@@ -5,7 +5,21 @@ public class Main {
     //linkedListTest();
     //arrayListTest();
     //removeDups();
-    removeMiddleNode();
+    //removeMiddleNode();
+    partitionList();
+  }
+
+  private static void partitionList() {
+    BareBoneLinkedList<Integer> list = new BareBoneLinkedList<>();
+    list.add(5);
+    list.add(3);
+    list.add(1);
+    list.add(4);
+    list.add(2);
+    list.partition(3);
+    for(int i = 0; i < list.size(); i++) {
+      System.out.println(list.get(i));
+    }
   }
 
   private static void removeMiddleNode() {
@@ -15,7 +29,7 @@ public class Main {
     list.add(3);
     list.add(4);
     list.add(5);
-    list.deleteMiddleNode(list.getNode(3);
+    list.deleteMiddleNode(list.getNode(3));
     for(int i = 0; i < list.size(); i++) {
       System.out.println(list.get(i));
     }
