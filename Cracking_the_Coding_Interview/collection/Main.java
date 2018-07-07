@@ -8,7 +8,61 @@ public class Main {
     //removeDups();
     //removeMiddleNode();
     //partitionList();
-    addNumbers();
+    //addNumbers();
+    findIntersection();
+  }
+
+  private static void findIntersection() {
+    BareBoneLinkedList<Integer> a = new BareBoneLinkedList<>();
+    a.add(5);
+    a.add(3);
+    a.add(1);
+    a.add(4);
+    a.add(2);
+    BareBoneLinkedList<Integer> b = new BareBoneLinkedList<>();
+    b.add(7);
+    b.add(6);
+    b.add(8);
+    BareBoneLinkedList.Node<Integer> node1 = new BareBoneLinkedList.Node<>(10);
+    BareBoneLinkedList.Node<Integer> node2 = new BareBoneLinkedList.Node<>(100);
+    BareBoneLinkedList.Node<Integer> node3 = new BareBoneLinkedList.Node<>(1000);
+    BareBoneLinkedList.Node<Integer> node4 = new BareBoneLinkedList.Node<>(10000);
+    a.addNode(node1);
+    b.addNode(node1);
+    a.addNode(node2);
+    a.addNode(node3);
+    a.addNode(node4);
+    b.size += 3;
+    BareBoneLinkedList.Node<Integer> ahead = a.head.next;
+    BareBoneLinkedList.Node<Integer> bhead = b.head.next;
+    while(ahead != null){
+      System.out.println(ahead.item);
+      ahead = ahead.next;
+    }
+    while(bhead != null){
+      System.out.println(bhead.item);
+      bhead = bhead.next;
+    }
+    BareBoneLinkedList.Node<Integer> intersectionNode = findIntersectionNode(a,b);
+    System.out.println(intersectionNode == null ? "Lists are not intersecting." : intersectionNode.item);
+  }
+
+  private static <T extends Comparable> BareBoneLinkedList.Node<T> findIntersectionNode(BareBoneLinkedList<T> a, BareBoneLinkedList<T> b) {
+    BareBoneLinkedList<T> longer = a.size() >= b.size() ? a : b;
+    BareBoneLinkedList<T> shorter = a.size() >= b.size() ? b : a;
+    int diff = longer.size() - shorter.size();
+
+    BareBoneLinkedList.Node<T> longerPtr = longer.getNode(diff);
+    BareBoneLinkedList.Node<T> shorterPtr = shorter.head.next;
+
+    while(longerPtr != null && shorterPtr != null) {
+      if(longerPtr == shorterPtr)
+        return longerPtr;
+      longerPtr = longerPtr.next;
+      shorterPtr = shorterPtr.next;
+    }
+
+    return null;
   }
 
   private static void addNumbers() {

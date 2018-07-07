@@ -1,7 +1,7 @@
 public class BareBoneLinkedList<T extends Comparable> {
 
   public Node<T> head = new Node<T>();
-  private int size = 0;
+  public int size = 0;
 
   public int size() {
     return size;
@@ -12,11 +12,14 @@ public class BareBoneLinkedList<T extends Comparable> {
   }
 
   public void add(T item) {
-    Node<T> lastNode = head;
-    while(lastNode.next != null) {
-      lastNode = lastNode.next;
-    }
+    Node<T> lastNode = getLastNode();
     lastNode.next = new Node<T>(item);
+    size++;
+  }
+
+  public void addNode(Node<T> node) {
+    Node<T> lastNode = getLastNode();
+    lastNode.next = node;
     size++;
   }
 
@@ -78,9 +81,17 @@ public class BareBoneLinkedList<T extends Comparable> {
 
   }
 
+  private Node<T> getLastNode() {
+    Node<T> lastNode = head;
+    while(lastNode.next != null) {
+      lastNode = lastNode.next;
+    }
+    return lastNode;
+  }
+
   public static class Node<T> {
     public T item;
-    public Node<T> next;
+    public Node<T> next = null;
 
     public Node() {}
 
