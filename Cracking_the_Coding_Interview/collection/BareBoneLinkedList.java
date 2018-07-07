@@ -1,4 +1,4 @@
-public class BareBoneLinkedList<T> {
+public class BareBoneLinkedList<T extends Comparable> {
 
   public Node<T> head = new Node<T>();
   private int size = 0;
@@ -32,6 +32,15 @@ public class BareBoneLinkedList<T> {
       localIndex++;
     }
     return node;
+  }
+
+  public void deleteMiddleNode(Node<T> node) {
+    if (node == head || node.next == null)
+      throw new IllegalArgumentException("No edge nodes allowed for this method - no triple reference pointer!");
+
+    node.item = node.next.item;
+    node.next = node.next.next;
+    size--;
   }
 
   public void removeDupsNoAdditionalSpace() {

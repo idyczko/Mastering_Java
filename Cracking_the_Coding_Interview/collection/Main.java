@@ -4,7 +4,21 @@ public class Main {
   public static void main(String[] args){
     //linkedListTest();
     //arrayListTest();
-    removeDups();
+    //removeDups();
+    removeMiddleNode();
+  }
+
+  private static void removeMiddleNode() {
+    BareBoneLinkedList<Integer> list = new BareBoneLinkedList<>();
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    list.add(4);
+    list.add(5);
+    list.deleteMiddleNode(list.getNode(3);
+    for(int i = 0; i < list.size(); i++) {
+      System.out.println(list.get(i));
+    }
   }
 
   private static void removeDups() {
