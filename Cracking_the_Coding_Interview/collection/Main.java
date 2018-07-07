@@ -9,7 +9,45 @@ public class Main {
     //removeMiddleNode();
     //partitionList();
     //addNumbers();
-    findIntersection();
+    //findIntersection();
+    findLoopStart();
+  }
+
+  private static void findLoopStart() {
+    BareBoneLinkedList<Integer> a = new BareBoneLinkedList<>();
+    a.add(52);
+    a.add(123);
+    a.add(12);
+    a.add(432);
+    a.add(232);
+    a.add(325);
+    a.add(233);
+    a.add(11);
+    a.add(42);
+    a.add(32);
+    a.addNode(a.getNode(4));
+    BareBoneLinkedList.Node<Integer> node = findLoopStart(a);
+    System.out.println(node == null? null : node.item);
+  }
+
+  private static <T extends Comparable> BareBoneLinkedList.Node<T> findLoopStart(BareBoneLinkedList<T> list) {
+    BareBoneLinkedList.Node<T> slow = list.head.next;
+    BareBoneLinkedList.Node<T> fast = list.head.next;
+
+    while(slow != null && fast !=null) {
+      if (fast.next == null)
+        return null;
+      slow = slow.next;
+      fast = fast.next.next;
+      if (slow == fast)
+        break;
+    }
+    BareBoneLinkedList.Node<T> slow2 = list.head.next;
+    while (slow != slow2) {
+      slow = slow.next;
+      slow2 = slow2.next;
+    }
+    return slow;
   }
 
   private static void findIntersection() {
