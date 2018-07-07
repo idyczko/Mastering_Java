@@ -1,3 +1,4 @@
+import static java.lang.Math.*;
 
 public class Main {
 
@@ -6,7 +7,71 @@ public class Main {
     //arrayListTest();
     //removeDups();
     //removeMiddleNode();
-    partitionList();
+    //partitionList();
+    addNumbers();
+  }
+
+  private static void addNumbers() {
+    BareBoneLinkedList<Integer> a = new BareBoneLinkedList<>();
+    a.add(5);
+    a.add(3);
+    a.add(1);
+    a.add(4);
+    a.add(2);
+    BareBoneLinkedList<Integer> b = new BareBoneLinkedList<>();
+    b.add(9);
+    b.add(7);
+    b.add(6);
+    b.add(8);
+    Integer rfh = addFromHead(a, b);
+    Integer rft = addFromTail(a, b);
+    System.out.println(rfh + " " + rft);
+  }
+
+  private static Integer addFromTail(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
+    BareBoneLinkedList<Integer> longer = a.size() >= b.size() ? a : b;
+    BareBoneLinkedList<Integer> shorter = a.size() >= b.size() ? b : a;
+    BareBoneLinkedList.Node<Integer> longerPtr = longer.head.next;
+    BareBoneLinkedList.Node<Integer> shorterPtr = shorter.head.next;
+
+    int diff = longer.size() - shorter.size();
+    int multiplier = (int) pow(10, longer.size() - 1);
+
+    Integer sum = 0;
+    while (longerPtr != null && shorterPtr != null) {
+      if (diff <= 0) {
+        sum += multiplier * shorterPtr.item;
+        shorterPtr = shorterPtr.next;
+      }
+
+      sum += multiplier * longerPtr.item;
+      longerPtr = longerPtr.next;
+
+      diff--;
+      multiplier /= 10;
+    }
+    return sum;
+  }
+
+  private static Integer addFromHead(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
+    BareBoneLinkedList.Node<Integer> headA = a.head.next;
+    BareBoneLinkedList.Node<Integer> headB = b.head.next;
+
+    int multiplier = 1;
+    Integer sum = 0;
+    while (headA != null || headB != null) {
+      if (headA != null) {
+        sum += multiplier * headA.item;
+        headA = headA.next;
+      }
+      if (headB != null) {
+        sum += multiplier * headB.item;
+        headB = headB.next;
+      }
+
+      multiplier *= 10;
+    }
+    return sum;
   }
 
   private static void partitionList() {
