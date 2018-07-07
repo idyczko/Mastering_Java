@@ -2,6 +2,31 @@
 public class Main {
 
   public static void main(String[] args){
+    //linkedListTest();
+    //arrayListTest();
+    removeDups();
+  }
+
+  private static void removeDups() {
+    BareBoneLinkedList<Integer> list = new BareBoneLinkedList<>();
+    list.add(5);
+    list.add(1);
+    list.add(2);
+    list.add(1);
+    list.add(3);
+    list.add(2);
+    list.add(1);
+    list.add(1);
+    list.add(3);
+    list.add(1);
+    list.add(4);
+    list.removeDupsNoAdditionalSpace();
+    for(int i = 0; i < list.size(); i++) {
+      System.out.println(list.get(i));
+    }
+  }
+
+  private static void linkedListTest() {
     //LinkedList
     List<Integer> list = new LinkedList<>();
     list.add(10);
@@ -24,7 +49,9 @@ public class Main {
     }
     System.out.println("3th to last element found recursively: " + ((LinkedList<Integer>) list).recursiveKthToLast(3));
     System.out.println("3th to last element found iteratively: " + ((LinkedList<Integer>) list).iterativeKthToLast(3));
+  }
 
+  private static void arrayListTest() {
     //ArrayList
     List<Integer> list2 = new ArrayList<>();
     list2.add(10);
@@ -53,6 +80,6 @@ public class Main {
     for(int i = 0; i<list2.size(); i++) {
       System.out.println(list2.get(i));
     }
-
   }
+
 }
