@@ -90,8 +90,6 @@ public class BareBoneLinkedLists {
 
   public static BareBoneLinkedList<Integer> addFromHeadToList(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
     BareBoneLinkedList<Integer> result = new BareBoneLinkedList<>();
-    BareBoneLinkedList.Node<Integer> headA = a.head.next;
-    BareBoneLinkedList.Node<Integer> headB = b.head.next;
 
     result.head.next = addFromHeadToList(a.head.next, b.head.next, 0);
 
@@ -114,4 +112,31 @@ public class BareBoneLinkedLists {
 
     return result;
   }
+
+  public static BareBoneLinkedList<Integer> addFromTailToList(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
+
+
+    BareBoneLinkedList<Integer> result = new BareBoneLinkedList<>();
+
+    int carry = addFromTailToList(result.head, a.head.next, b.head.next);
+    if (carry > 0) {
+      BareBoneLinkedList.Node<Integer> carryNode = new BareBoneLinkedList.Node<>(carry);
+      carryNode.next = result.head.next;
+      result.head.next = carryNode;
+    }
+    return result;
+  }
+
+  private static int addFromTailToList(BareBoneLinkedList.Node<Integer> tail,
+    BareBoneLinkedList.Node<Integer> a,
+    BareBoneLinkedList.Node<Integer> b) {
+    if(a == null || b == null)
+      return 0;
+    tail.next = new BareBoneLinkedList.Node<>();
+    int carry = addFromTailToList(tail.next, a.next, b.next);
+    tail.next.item = (a.item + b.item + carry) % 10;
+
+    return (a.item + b.item + carry)/10;
+  }
+
 }

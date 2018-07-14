@@ -88,6 +88,15 @@ public class Main {
       System.out.println(head.next.item);
       head = head.next;
     }
+    BareBoneLinkedList.Node<Integer> zero = new BareBoneLinkedList.Node<>(0);
+    zero.next = b.head.next;
+    b.head.next = zero;
+    BareBoneLinkedList<Integer> listRft = BareBoneLinkedLists.addFromTailToList(a, b);
+    head = listRft.head;
+    while(head.next != null){
+      System.out.println(head.next.item);
+      head = head.next;
+    }
   }
 
   private static void partitionList() {
