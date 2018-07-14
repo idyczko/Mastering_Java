@@ -26,29 +26,11 @@ public class Main {
     a.add(42);
     a.add(32);
     a.addNode(a.getNode(4));
-    BareBoneLinkedList.Node<Integer> node = findLoopStart(a);
+    BareBoneLinkedList.Node<Integer> node = BareBoneLinkedLists.findLoopStart(a);
     System.out.println(node == null? null : node.item);
   }
 
-  private static <T extends Comparable> BareBoneLinkedList.Node<T> findLoopStart(BareBoneLinkedList<T> list) {
-    BareBoneLinkedList.Node<T> slow = list.head.next;
-    BareBoneLinkedList.Node<T> fast = list.head.next;
 
-    while(slow != null && fast !=null) {
-      if (fast.next == null)
-        return null;
-      slow = slow.next;
-      fast = fast.next.next;
-      if (slow == fast)
-        break;
-    }
-    BareBoneLinkedList.Node<T> slow2 = list.head.next;
-    while (slow != slow2) {
-      slow = slow.next;
-      slow2 = slow2.next;
-    }
-    return slow;
-  }
 
   private static void findIntersection() {
     BareBoneLinkedList<Integer> a = new BareBoneLinkedList<>();
@@ -81,26 +63,8 @@ public class Main {
       System.out.println(bhead.item);
       bhead = bhead.next;
     }
-    BareBoneLinkedList.Node<Integer> intersectionNode = findIntersectionNode(a,b);
+    BareBoneLinkedList.Node<Integer> intersectionNode = BareBoneLinkedLists.findIntersectionNode(a,b);
     System.out.println(intersectionNode == null ? "Lists are not intersecting." : intersectionNode.item);
-  }
-
-  private static <T extends Comparable> BareBoneLinkedList.Node<T> findIntersectionNode(BareBoneLinkedList<T> a, BareBoneLinkedList<T> b) {
-    BareBoneLinkedList<T> longer = a.size() >= b.size() ? a : b;
-    BareBoneLinkedList<T> shorter = a.size() >= b.size() ? b : a;
-    int diff = longer.size() - shorter.size();
-
-    BareBoneLinkedList.Node<T> longerPtr = longer.getNode(diff);
-    BareBoneLinkedList.Node<T> shorterPtr = shorter.head.next;
-
-    while(longerPtr != null && shorterPtr != null) {
-      if(longerPtr == shorterPtr)
-        return longerPtr;
-      longerPtr = longerPtr.next;
-      shorterPtr = shorterPtr.next;
-    }
-
-    return null;
   }
 
   private static void addNumbers() {
@@ -115,55 +79,9 @@ public class Main {
     b.add(7);
     b.add(6);
     b.add(8);
-    Integer rfh = addFromHead(a, b);
-    Integer rft = addFromTail(a, b);
+    Integer rfh = BareBoneLinkedLists.addFromHead(a, b);
+    Integer rft = BareBoneLinkedLists.addFromTail(a, b);
     System.out.println(rfh + " " + rft);
-  }
-
-  private static Integer addFromTail(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
-    BareBoneLinkedList<Integer> longer = a.size() >= b.size() ? a : b;
-    BareBoneLinkedList<Integer> shorter = a.size() >= b.size() ? b : a;
-    BareBoneLinkedList.Node<Integer> longerPtr = longer.head.next;
-    BareBoneLinkedList.Node<Integer> shorterPtr = shorter.head.next;
-
-    int diff = longer.size() - shorter.size();
-    int multiplier = (int) pow(10, longer.size() - 1);
-
-    Integer sum = 0;
-    while (longerPtr != null && shorterPtr != null) {
-      if (diff <= 0) {
-        sum += multiplier * shorterPtr.item;
-        shorterPtr = shorterPtr.next;
-      }
-
-      sum += multiplier * longerPtr.item;
-      longerPtr = longerPtr.next;
-
-      diff--;
-      multiplier /= 10;
-    }
-    return sum;
-  }
-
-  private static Integer addFromHead(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
-    BareBoneLinkedList.Node<Integer> headA = a.head.next;
-    BareBoneLinkedList.Node<Integer> headB = b.head.next;
-
-    int multiplier = 1;
-    Integer sum = 0;
-    while (headA != null || headB != null) {
-      if (headA != null) {
-        sum += multiplier * headA.item;
-        headA = headA.next;
-      }
-      if (headB != null) {
-        sum += multiplier * headB.item;
-        headB = headB.next;
-      }
-
-      multiplier *= 10;
-    }
-    return sum;
   }
 
   private static void partitionList() {
