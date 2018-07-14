@@ -8,9 +8,9 @@ public class Main {
     //removeDups();
     //removeMiddleNode();
     //partitionList();
-    //addNumbers();
+    addNumbers();
     //findIntersection();
-    findLoopStart();
+    //findLoopStart();
   }
 
   private static void findLoopStart() {
@@ -81,7 +81,13 @@ public class Main {
     b.add(8);
     Integer rfh = BareBoneLinkedLists.addFromHead(a, b);
     Integer rft = BareBoneLinkedLists.addFromTail(a, b);
+    BareBoneLinkedList<Integer> listRfh = BareBoneLinkedLists.addFromHeadToList(a, b);
     System.out.println(rfh + " " + rft);
+    BareBoneLinkedList.Node<Integer> head = listRfh.head;
+    while(head.next != null){
+      System.out.println(head.next.item);
+      head = head.next;
+    }
   }
 
   private static void partitionList() {

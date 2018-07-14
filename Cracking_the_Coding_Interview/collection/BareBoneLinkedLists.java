@@ -87,4 +87,31 @@ public class BareBoneLinkedLists {
     }
     return sum;
   }
+
+  public static BareBoneLinkedList<Integer> addFromHeadToList(BareBoneLinkedList<Integer> a, BareBoneLinkedList<Integer> b) {
+    BareBoneLinkedList<Integer> result = new BareBoneLinkedList<>();
+    BareBoneLinkedList.Node<Integer> headA = a.head.next;
+    BareBoneLinkedList.Node<Integer> headB = b.head.next;
+
+    result.head.next = addFromHeadToList(a.head.next, b.head.next, 0);
+
+    return result;
+  }
+
+  private static BareBoneLinkedList.Node<Integer> addFromHeadToList(BareBoneLinkedList.Node<Integer> a,
+    BareBoneLinkedList.Node<Integer> b, int carry) {
+
+    if(a == null && b == null && carry == 0)
+      return null;
+
+    BareBoneLinkedList.Node<Integer> result = new BareBoneLinkedList.Node<>();
+    int value = carry + (a == null ? 0 : a.item) + (b == null ? 0 : b.item);
+    result.item = value % 10;
+
+    if (a != null || b != null) {
+      result.next = addFromHeadToList(a == null ? null : a.next, b == null ? null : b.next, value/10);
+    }
+
+    return result;
+  }
 }
