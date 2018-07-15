@@ -1,8 +1,34 @@
 import static java.lang.Math.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BareBoneLinkedLists {
 
   private BareBoneLinkedLists(){};
+
+  public static <T extends Comparable> boolean isPalindrome(BareBoneLinkedList<T> list) {
+    AtomicBoolean palindromeSoFar = new AtomicBoolean(true);
+    isPalindrome(list.head.next, list.size, palindromeSoFar);
+    return palindromeSoFar.get();
+  }
+
+  private static <T extends Comparable> BareBoneLinkedList.Node<T> isPalindrome(
+    BareBoneLinkedList.Node<T> node, int length, AtomicBoolean palindromeSoFar) {
+      if (length == 1)
+        return node.next;
+      else if (length == 0)
+        return node;
+
+      BareBoneLinkedList.Node<T> backNode = isPalindrome(node.next, length - 2, palindromeSoFar);
+      if (!palindromeSoFar.get())
+        return null;
+
+      if (!node.item.equals(backNode.item)) {
+        palindromeSoFar.set(false);
+        return null;
+      }
+
+      return backNode.next;
+    }
 
   public static <T extends Comparable> BareBoneLinkedList.Node<T> findLoopStart(BareBoneLinkedList<T> list) {
     BareBoneLinkedList.Node<T> slow = list.head.next;

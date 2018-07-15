@@ -8,9 +8,22 @@ public class Main {
     //removeDups();
     //removeMiddleNode();
     //partitionList();
-    addNumbers();
+    //addNumbers();
     //findIntersection();
     //findLoopStart();
+    checkPalindrome();
+  }
+
+  private static void checkPalindrome() {
+    BareBoneLinkedList<Integer> a = new BareBoneLinkedList<>();
+    a.add(1);
+    a.add(2);
+    a.add(3);
+    a.add(4);
+    a.add(3);
+    a.add(2);
+    a.add(1);
+    System.out.println(BareBoneLinkedLists.isPalindrome(a));
   }
 
   private static void findLoopStart() {
