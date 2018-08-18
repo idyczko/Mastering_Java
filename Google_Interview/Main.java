@@ -19,16 +19,16 @@ public class Main {
 		if (expression[begin] != '(')
 			return Integer.valueOf(new String(expression).substring(begin, end));
 		
-		if (expression[begin + 1] == '+') {
-			return sum(extractOperands(expression, begin + 4, end - 2));
+		if (expression[begin + 2] == '+') {
+			return sum(extractOperands(expression, begin + 4, end - 1));
 		}  else {
-			return product(extractOperands(expression, begin + 4, end - 2));
+			return product(extractOperands(expression, begin + 4, end - 1));
 		}
 	}
 
 	public static int[] extractOperands(char[] expression, int begin, int end) {
 		List<Integer> operands = new ArrayList<>();
-		System.out.println(new String(expression).substring(begin, end + 1));
+		System.out.println(new String(expression).substring(begin, end));
 		while(begin < end) {
 			int endIndex = begin;
 			if (expression[begin] != '(') {
@@ -44,7 +44,6 @@ public class Main {
 						brackets--;
 				}
 			}
-			System.out.println(begin + " " + endIndex + " " + new String(expression).substring(begin, endIndex + 1));
 			operands.add(eval(expression, begin, endIndex + 1));
 			begin = endIndex + 2;
 		}
