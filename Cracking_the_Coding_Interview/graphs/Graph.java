@@ -40,16 +40,38 @@ public class Graph {
 		});
 	}
 
+	public void removeNode(int id) {
+		Optional<Node> node = nodes.stream().filter(item -> item.id.equals(id)).findFirst();
+
+		if (!node.isPresent())
+			throw new IllegalArgumentException("The node you want to remove does not exist");
+
+		removeNode(node.get());
+	}
+
 	public void removeNode(Node node) {
 		removeEdges((Edge[]) edges.toArray());
 		nodes.remove(node);
 		nodesCount--;
 	}
 
+	public void removeEdge(int nodeOneId, int nodeTwoId) {
+		Optional<Edge> optionalEdge = edges.stream().filter(edge -> 
+			edge.firstNode.id.equals(nodeOneId < nodeTwoId ? nodeOneId : nodeTwoId) && 
+				edge.secondNode.id.equals(nodeOneId < nodeTwoId ? nodeTwoId : nodeOneId)).findFirst();
+		
+		if (!optionalEdge.isPresent())
+			throw new IllegalArgumentException("The edge between listed nodes does not exist.");
+
+		removeEdges(new Edge[] {optionalEdge.get()});
+	}
+
 	public void removeEdges(Edge... edges) {
 		for (Edge edge : edges) {
 			edge.firstNode.incidentEdges.remove(edge);
+			edge.firstNode.adjacentNodes.remove(edge.secondNode);
 			edge.secondNode.incidentEdges.remove(edge);
+			edge.secondNode.adjacentNodes.remove(edge.firstNode);
 			this.edges.remove(edge);
 		}
 	}

@@ -33,5 +33,9 @@ public class Main {
 		graph.printMathematicalNotation();
 		graph.printAdjacencyMatrix();
 		graph.printNeighbourList();
+		
+		graph.removeEdge(0, 3);
+		graph.removeNode(4);
+		graph.printAdjacencyMatrix();
 	}
 }
