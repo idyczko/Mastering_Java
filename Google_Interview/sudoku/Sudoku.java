@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Sudoku {
 
@@ -48,17 +49,17 @@ public class Sudoku {
 		if(initialAssignment.length != 9 || initialAssignment[0].length != 9)
 			throw new IllegalArgumentException("Given array does not represent an initial Sudoku assignment.");
 		
-		printDomains();
+		//printDomains();
 		for(int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				if (Character.isDigit(initialAssignment[i][j]))
-					sudokuBoard[i][j].assign(initialAssignment[i][j] - '0');
-				else if (initialAssignment[i][j] != ' ')
+					sudokuBoard[i][j].assign(Character.getNumericValue(initialAssignment[i][j]));
+				else if (initialAssignment[i][j] != ' ') {
 					throw new IllegalArgumentException("Ecountered unrecognized character in the context of sudoku board instantiation.");
+				}
 			}
 		}
-		printDomains();
-		printConstrainedVariables();
+		//printDomains();
 	}
 
 	public boolean solve() {
@@ -70,7 +71,7 @@ public class Sudoku {
 		for(int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				if (sudokuBoard[i][j].isAssigned)
-					board[i][j] = sudokuBoard[i][j].assignment;
+					board[i][j] = Character.forDigit(sudokuBoard[i][j].assignment, 10);
 				else
 					board[i][j] = ' ';
 			}
@@ -79,21 +80,21 @@ public class Sudoku {
 	}
 
 	private boolean solve(Sudoku problem) {
-		Optional<DecisionVariable> smallestDomainVariable = unassingedVariables.sorted().findFirst();
+		Optional<DecisionVariable> smallestDomainVariable = unassignedVariables.stream().sorted().findFirst();
 		if (!smallestDomainVariable.isPresent()) {
 			printDomains();
 			return true;
 		}
+
 		if (smallestDomainVariable.get().domain.isEmpty())
 			return false;
 
-		AtomicInteger index = new AtomicInteger();
 		smallestDomainVariable.get().domain.stream().sorted().forEach(value -> {
 			char[][] board = problem.toCharArray();
-			board[smallestDomainVariable.get().x][smallestDomainVariable.get().y] = value;
-			Sudoku subproblem = new Sudoku(board);
-			subproblemResults[index.getAndIncrement()] = subproblem.solve();
+			board[smallestDomainVariable.get().x][smallestDomainVariable.get().y] = Character.forDigit(value.intValue(), 10);
+			new Sudoku(board).solve();
 		});
+
 		return false;
 	}
 
@@ -130,7 +131,7 @@ public class Sudoku {
 		public Set<DecisionVariable> constrainedVariables = new HashSet<>();
 		public Set<Integer> domain = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 		public boolean isAssigned = false;
-		public Integer assignment;i
+		public Integer assignment;
 		public int x;
 		public int y;
 
@@ -154,7 +155,7 @@ public class Sudoku {
 
 		@Override
 		public int compareTo(DecisionVariable var) {
-			return new Integer(this.domain.size()).compareTo(new Integer(var.domain.size()));
+			return Integer.valueOf(this.domain.size()).compareTo(Integer.valueOf(var.domain.size()));
 		}
 	}
 }
