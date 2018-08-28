@@ -6,11 +6,13 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class Sudoku {
-
+	
+	public static int NODES = 0;
+	private int depth;
 	private Set<DecisionVariable> unassignedVariables = new HashSet<>(81);	
 	private DecisionVariable[][] sudokuBoard = new DecisionVariable[9][9];
 
-	public Sudoku() {
+	private Sudoku() {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				sudokuBoard[i][j] = new DecisionVariable();
@@ -42,10 +44,15 @@ public class Sudoku {
 		}
 
 	}
-	
+
 	public Sudoku(char[][] initialAssignment) {
+		this(initialAssignment, 0);
+	}
+	
+	private Sudoku(char[][] initialAssignment, int depth) {
 		this();
-		
+		this.depth = depth;
+		NODES++;
 		if(initialAssignment.length != 9 || initialAssignment[0].length != 9)
 			throw new IllegalArgumentException("Given array does not represent an initial Sudoku assignment.");
 		
@@ -81,8 +88,9 @@ public class Sudoku {
 
 	private boolean solve(Sudoku problem) {
 		Optional<DecisionVariable> smallestDomainVariable = unassignedVariables.stream().sorted().findFirst();
+		printAssignments();
+		
 		if (!smallestDomainVariable.isPresent()) {
-			printDomains();
 			return true;
 		}
 
@@ -92,10 +100,21 @@ public class Sudoku {
 		smallestDomainVariable.get().domain.stream().sorted().forEach(value -> {
 			char[][] board = problem.toCharArray();
 			board[smallestDomainVariable.get().x][smallestDomainVariable.get().y] = Character.forDigit(value.intValue(), 10);
-			new Sudoku(board).solve();
+			new Sudoku(board, this.depth + 1).solve();
 		});
 
 		return false;
+	}
+
+	public void printAssignments() {
+		System.out.println("Depth: " + this.depth);
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				System.out.print((sudokuBoard[i][j].isAssigned ? sudokuBoard[i][j].assignment : " ") + " ");
+			}
+			System.out.println();
+		}
+
 	}
 
 	public void printDomains() {
