@@ -17,16 +17,26 @@ public class Main {
 		graph.addNode();
 		graph.addNode();
 		graph.addNode();
+		graph.addNode();
+		graph.addNode();
+		graph.addNode();
+		graph.addNode();
 
+		graph.addEdge(0, 1);
+		graph.addEdge(0, 2);
 		graph.addEdge(0, 3);
-		graph.addEdge(0, 4);
-		graph.addEdge(0, 5);
-		graph.addEdge(1, 3);
 		graph.addEdge(1, 4);
 		graph.addEdge(1, 5);
-		graph.addEdge(2, 3);
 		graph.addEdge(2, 4);
 		graph.addEdge(2, 5);
+		graph.addEdge(2, 6);
+		graph.addEdge(3, 6);
+		graph.addEdge(4, 7);
+		graph.addEdge(5, 7);
+		graph.addEdge(5, 8);
+		graph.addEdge(6, 8);
+		graph.addEdge(7, 9);
+		graph.addEdge(8, 9);
 		
 		
 		System.out.println("Graphs: ");	
@@ -34,8 +44,9 @@ public class Main {
 		graph.printAdjacencyMatrix();
 		graph.printNeighbourList();
 		
-		graph.removeEdge(0, 3);
-		graph.removeNode(4);
-		graph.printAdjacencyMatrix();
+		System.out.println("DFS:");
+		Graphs.dfs(graph, 0).stream().forEach(System.out::println);
+		System.out.println("BFS:");
+		Graphs.bfs(graph, 0).stream().forEach(System.out::println);
 	}
 }
