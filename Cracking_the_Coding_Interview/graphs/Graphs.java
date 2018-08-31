@@ -20,7 +20,19 @@ public class Graphs {
 	}
 
 	public static boolean reachable(Graph g, int start, int end) {
-		List<Integer> path = fs(g, start, true, true, end);
+		return reachable(g, start, end, false);
+	}
+
+	public static List<Integer> shortestPath(Graph g, int start, int end) {
+		List<Integer> path = fs(g, start, false, true, end);
+		if (!path.get(path.size() - 1).equals(end))
+			throw new IllegalArgumentException("End is not reachable from the start.");
+
+		return path;
+	}
+
+	private static boolean reachable(Graph g, int start, int end, boolean dfs) {
+		List<Integer> path = fs(g, start, dfs, true, end);
 		return path.get(path.size() - 1).equals(end);
 	}
 
