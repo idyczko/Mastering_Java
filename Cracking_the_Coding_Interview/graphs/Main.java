@@ -21,6 +21,7 @@ public class Main {
 		graph.addNode();
 		graph.addNode();
 		graph.addNode();
+		graph.addNode();
 
 		graph.addEdge(0, 1);
 		graph.addEdge(0, 2);
@@ -48,5 +49,8 @@ public class Main {
 		Graphs.dfs(graph, 0).stream().forEach(System.out::println);
 		System.out.println("BFS:");
 		Graphs.bfs(graph, 0).stream().forEach(System.out::println);
+		System.out.println("Reachability:");
+		System.out.println("There " + (Graphs.reachable(graph, 0, 9) ? "is":"is no") + " path between nodes 0 and 9.");
+		System.out.println("There " + (Graphs.reachable(graph, 0, 10) ? "is":"is no") + " path between nodes 0 and 10.");
 	}
 }

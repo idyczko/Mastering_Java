@@ -12,17 +12,22 @@ public class Graphs {
 
 	
 	public static List<Integer> dfs(Graph g, int root) {
-		return fs(g, root, true);
+		return fs(g, root, true, false, -1);
 	}
 
 	public static List<Integer> bfs(Graph g, int root) {
-		return fs(g, root, false);
+		return fs(g, root, false, false, -1);
+	}
+
+	public static boolean reachable(Graph g, int start, int end) {
+		List<Integer> path = fs(g, start, true, true, end);
+		return path.get(path.size() - 1).equals(end);
 	}
 
 
-	public static List<Integer> fs(Graph g, int root, boolean dfs) {
-		Optional<Graph.Node> rootNode = g.nodes.stream().filter(item -> item.id == root).findFirst();
-		List<Integer> dfsOrder = new ArrayList<>(g.nodes.size());
+	private static List<Integer> fs(Graph g, int start, boolean dfs, boolean search, int end) {
+		Optional<Graph.Node> rootNode = g.nodes.stream().filter(item -> item.id == start).findFirst();
+		List<Integer> fsOrder = new ArrayList<>(g.nodes.size());
 
 		if (! rootNode.isPresent())
 			throw new IllegalArgumentException("Specified root node does not exist.");
@@ -32,9 +37,13 @@ public class Graphs {
 		queue.add(rootNode.get());
 		while (!queue.isEmpty()) {
 			Graph.Node polledNode = queue.poll();
-			dfsOrder.add(polledNode.id);
+			fsOrder.add(polledNode.id);
 			visitedNodes.add(polledNode);
 			List<Graph.Node> toBeQueued = polledNode.adjacentNodes.stream().filter(node -> !visitedNodes.contains(node) && !queue.contains(node)).collect(Collectors.toList());
+			if (search && toBeQueued.stream().filter(node -> node.id == end).findFirst().isPresent()){
+				fsOrder.add(end);
+				return fsOrder;
+			}
 			if (dfs)
 				Collections.sort(toBeQueued, Collections.reverseOrder());
 			toBeQueued.stream().forEach(node -> {
@@ -45,7 +54,7 @@ public class Graphs {
 			});
 		}
 
-		return dfsOrder;		
+		return fsOrder;		
 
 	}
 } 
