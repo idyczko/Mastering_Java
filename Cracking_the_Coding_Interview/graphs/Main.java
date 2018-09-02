@@ -1,3 +1,5 @@
+import java.util.stream.Collectors;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -52,5 +54,9 @@ public class Main {
 		System.out.println("Reachability:");
 		System.out.println("There " + (Graphs.reachable(graph, 0, 9) ? "is":"is no") + " path between nodes 0 and 9.");
 		System.out.println("There " + (Graphs.reachable(graph, 0, 10) ? "is":"is no") + " path between nodes 0 and 10.");
+		
+		System.out.println("Shortest path.");
+		System.out.println("The shortest path between nodes 0 and 9: " + Graphs.shortestPath(graph, 0, 9).stream().map(Object::toString).collect(Collectors.joining(", ")));
+		System.out.println("The shortest path between nodes 8 and 2: " + Graphs.shortestPath(graph, 8, 2).stream().map(Object::toString).collect(Collectors.joining(", ")));
 	}
 }
