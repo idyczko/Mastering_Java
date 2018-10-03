@@ -16,7 +16,17 @@ public class Bee implements Runnable{
 		while(true) {
 			System.out.println("Thread " + number + " starts execution...");
 			try {
-				System.out.println("Calculation result: " + calc.calculate(number)  + " Should be: " + number * 45);
+				synchronized(calc) {
+					System.out.println("Thread " + number  + " obtained and locked necessary resource...");
+					if (number == 7)
+						calc.wait();
+					System.out.println("Thread " + number + " calculation result: " + calc.calculate(number)  + " Should be: " + number * 45);
+					System.out.println("Thread " + number + " releasing resoruces... Entering cooling off mode...");
+					if (number == 1 && Math.random() >= 0.5) {
+						System.out.println("Thread " + number +  " notifies all!");
+						calc.notifyAll();
+					}
+				}
 				Thread.sleep(napTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

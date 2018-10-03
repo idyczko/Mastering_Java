@@ -2,7 +2,7 @@
 public class StatefulCalculator {
 	int intermediateResult = 0;
 
-	public synchronized int calculate(int input) throws InterruptedException{
+	public int calculate(int input) throws InterruptedException{
 		firstStep();
 		int cache = intermediateResult;
 		cleanUp();
