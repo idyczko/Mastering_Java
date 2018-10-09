@@ -8,7 +8,8 @@ public class Main {
     means what "super" would mean in the child class. Therefore the field from
     the base class is being read.
     */
-    Sysyem.out.println(dc.getName());
+    //Is it astonishing though? We have not provided any implementation in derived class so how do we expect dynamic dispatch to be employed?
+    System.out.println(dc.getName());
     System.out.println(dc.name);
     System.out.println(ac.getName());
     System.out.println(ac.name);
