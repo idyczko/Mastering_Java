@@ -5,17 +5,19 @@ import java.util.Collection;
 
 public class DictionaryDetrie implements Detrie {
 	
+	private int length;
 	private Node root = new MyNode();
 	private Node masterLeaf = new MyNode();
 
+	public DictionaryDetrie(int length) {this.length = length;}
 	public Node getRoot() {return this.root;}
 	public Node getMasterLeaf() {return this.masterLeaf;};
 
 	public void insertWord(String word) {
 	
 		Node parent = root;
-		Node newNode = null;
-		for (char c : word.toCharArray()) {
+		char[] wordChars = word.toCharArray();
+		for (char c : wordChars) {
 			Set<Node> successors = parent.getSuccessors();
 			if (successors.contains(this.masterLeaf))
 				return;
@@ -25,7 +27,10 @@ public class DictionaryDetrie implements Detrie {
 				parent = next.get();
 				continue;
 			}
-
+		}
+		
+		Node newNode = null;
+		for (int i = parent.level; i < this.length; i++) {
 			newNode = new MyNode(c);
 			newNode.getPredecessors().add(parent);
 			parent.getSuccessors().add(newNode);
@@ -34,8 +39,6 @@ public class DictionaryDetrie implements Detrie {
 
 		if(newNode != null) {
 			mergeBack(newNode);
-			newNode.getSuccessors().add(masterLeaf);
-			masterLeaf.getPredecessors().add(newNode);
 		}
 	}
 
@@ -51,7 +54,7 @@ public class DictionaryDetrie implements Detrie {
 			if (successors.contains(this.masterLeaf()))
 				break;
 
-			Optional<Node> next = successors.stream().filteR(node -> node.getChar().equals(c)).findAny();
+			Optional<Node> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
 			if (next.isPresent()) {
 				parent = next.get();
 				continue;
