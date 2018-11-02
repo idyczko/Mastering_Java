@@ -6,35 +6,27 @@ import java.util.Collection;
 public class DictionaryDetrie implements Detrie {
 	
 	private int length;
-	private Node root = new MyNode();
-	private Node masterLeaf = new MyNode();
+	private MyNode root = new MyNode();
+	private MyNode masterLeaf = new MyNode();
 
-	public DictionaryDetrie(int length) {this.length = length;}
+	public DictionaryDetrie(int length) {this.length = length; this.masterLeaf.level = length + 1;}
 	public Node getRoot() {return this.root;}
-	public Node getMasterLeaf() {return this.masterLeaf;};
+	public Node getMasterLeaf() {return this.masterLeaf;}
 
 	public void insertWord(String word) {
 	
-		Node parent = root;
+		Optional<MyNode> maybeParent = parentOfFirstTypo(word);
 		char[] wordChars = word.toCharArray();
-		for (char c : wordChars) {
-			Set<Node> successors = parent.getSuccessors();
-			if (successors.contains(this.masterLeaf))
-				return;
-
-			Optional<Node> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
-			if (next.isPresent()) {
-				parent = next.get();
-				continue;
-			}
-		}
 		
-		Node newNode = null;
-		for (int i = parent.level; i < this.length; i++) {
-			newNode = new MyNode(c);
-			newNode.getPredecessors().add(parent);
-			parent.getSuccessors().add(newNode);
-			parent = newNode;
+		MyNode newNode = null;
+		if (maybeParent.isPresent()) {
+			MyNode parent = maybeParent.get();
+			for (int i = parent.level; i < this.length; i++) {
+				newNode = new MyNode(wordChars[i], i + 1);
+				newNode.getPredecessors().add(parent);
+				parent.getSuccessors().add(newNode);
+				parent = newNode;
+			}
 		}
 
 		if(newNode != null) {
@@ -43,32 +35,43 @@ public class DictionaryDetrie implements Detrie {
 	}
 
 	public boolean isZeroOrOneTypoAway(String word) {
-		Node parent = parentOfFirstTypo(word);
+		Optional<MyNode> parent = parentOfFirstTypo(word);
+		if (!parent.isPresent())
+			return true;
+
+		int firstTypoLevel = parent.get().level;
+		Optional<MyNode> child= childOfFirstTypoFromTail(word);
+		if (!child.isPresent())
+			throw new IllegalStateException("Inconsistent dictionary state.");
+
+		if ((child.get().level - firstTypoLevel) > 2)
+			return false;
+		return true;
 	}
 
-	private Node parentOfFirstTypo(String word) {
-		Node parent = root;
+	private Optional<MyNode> parentOfFirstTypo(String word) {
+		MyNode parent = this.root;
 		
 		for (char c : word.toCharArray()) {
-			Set<Successors> = parent.getSuccessors();
+			Set<MyNode> successors = parent.getSuccessors();
 			if (successors.contains(this.masterLeaf()))
 				break;
 
-			Optional<Node> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
+			Optional<MyNode> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
 			if (next.isPresent()) {
 				parent = next.get();
 				continue;
 			}
 
-			return parent;
+			return new Optional<>(parent);
 		}
 
-		return null;
+		return Optional.EMPTY;
 	}
 
-	private void mergeBack(Node node) {
-		Node child = masterLeaf;
-		Optional<Node> equivalent;
+	private void mergeBack(MyNode node) {
+		MyNode child = masterLeaf;
+		Optional<MyNode> equivalent;
 		while ((equivalent = findNodeWithChar(child.getPredecessors(), node.getChar())).isPresent()) {
 			child = equivalent.get();
 			node = node.getPredecessors().toArray(new MyNode[]{})[0];
@@ -78,7 +81,7 @@ public class DictionaryDetrie implements Detrie {
 		node.getSuccessors().add(child);
 	} 
 
-	private Optional<Node> findNodeWithChar(Collection<Node> nodes, final Character c) {
+	private Optional<MyNode> findNodeWithChar(Collection<MyNode> nodes, final Character c) {
 		return nodes.stream().filter(node -> node.getChar().equals(c)).findAny();
 	}
 
@@ -86,9 +89,11 @@ public class DictionaryDetrie implements Detrie {
 		private Character c;
 		private Set<Node> predecessors = new HashSet<Node>();
 		private Set<Node> successors = new HashSet<Node>();
-		
+		public int level;
+
 		public MyNode() {}
 		public MyNode(Character c) {this.c = c;}
+		public MyNode(Character c, int level) {this.c = c; this.level = level;}
 		public Character getChar() {return this.c;}
 		public Set<Node> getPredecessors() {return this.predecessors;}
 		public Set<Node> getSuccessors() {return this.successors;}
