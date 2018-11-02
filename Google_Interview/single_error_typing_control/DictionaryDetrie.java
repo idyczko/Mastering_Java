@@ -39,6 +39,30 @@ public class DictionaryDetrie implements Detrie {
 		}
 	}
 
+	public boolean isZeroOrOneTypoAway(String word) {
+		Node parent = parentOfFirstTypo(word);
+	}
+
+	private Node parentOfFirstTypo(String word) {
+		Node parent = root;
+		
+		for (char c : word.toCharArray()) {
+			Set<Successors> = parent.getSuccessors();
+			if (successors.contains(this.masterLeaf()))
+				break;
+
+			Optional<Node> next = successors.stream().filteR(node -> node.getChar().equals(c)).findAny();
+			if (next.isPresent()) {
+				parent = next.get();
+				continue;
+			}
+
+			return parent;
+		}
+
+		return null;
+	}
+
 	private void mergeBack(Node node) {
 		Node child = masterLeaf;
 		Optional<Node> equivalent;
