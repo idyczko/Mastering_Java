@@ -1,6 +1,7 @@
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Collection;
 
 public class DictionaryDetrie implements Detrie {
 	
@@ -41,8 +42,7 @@ public class DictionaryDetrie implements Detrie {
 	private void mergeBack(Node node) {
 		Node child = masterLeaf;
 		Optional<Node> equivalent;
-		
-		while ((equivalent = child.getPredecessors().stream().filter(item -> item.getChar().equals(node.getChar())).findAny()).isPresent()) {
+		while ((equivalent = findNodeWithChar(child.getPredecessors(), node.getChar())).isPresent()) {
 			child = equivalent.get();
 			node = node.getPredecessors().toArray(new MyNode[]{})[0];
 		}
@@ -50,6 +50,10 @@ public class DictionaryDetrie implements Detrie {
 		node.getSuccessors().clear();
 		node.getSuccessors().add(child);
 	} 
+
+	private Optional<Node> findNodeWithChar(Collection<Node> nodes, final Character c) {
+		return nodes.stream().filter(node -> node.getChar().equals(c)).findAny();
+	}
 
 	public static class MyNode implements Node {
 		private Character c;
