@@ -49,29 +49,50 @@ public class DictionaryDetrie implements Detrie {
 		return true;
 	}
 
-	private Optional<MyNode> parentOfFirstTypo(String word) {
-		MyNode parent = this.root;
-		
-		for (char c : word.toCharArray()) {
-			Set<MyNode> successors = parent.getSuccessors();
-			if (successors.contains(this.masterLeaf()))
+	private Optional<MyNode> childOfFirstTypoFromTail(String word) {
+		Node child = this.masterLeaf;
+
+		for (int i = word.length() - 1; i >= 0; i--) {
+			final Character c = word.charAt(i);
+			Set<Node> predecessors = child.getPredecessors();
+			if (predecessors.contains(this.root))
 				break;
 
-			Optional<MyNode> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
+			Optional<Node> next = predecessors.stream().filter(node -> node.getChar().equals(c)).findAny();
+			if (next.isPresent()) {
+				child = next.get();
+				continue;
+			}
+
+			return Optional.of((MyNode) child);
+		}
+
+		return Optional.empty();
+	}
+
+	private Optional<MyNode> parentOfFirstTypo(String word) {
+		Node parent = this.root;
+		
+		for (char c : word.toCharArray()) {
+			Set<Node> successors = parent.getSuccessors();
+			if (successors.contains(this.masterLeaf))
+				break;
+
+			Optional<Node> next = successors.stream().filter(node -> node.getChar().equals(c)).findAny();
 			if (next.isPresent()) {
 				parent = next.get();
 				continue;
 			}
 
-			return new Optional<>(parent);
+			return Optional.of((MyNode) parent);
 		}
 
-		return Optional.EMPTY;
+		return Optional.empty();
 	}
 
-	private void mergeBack(MyNode node) {
-		MyNode child = masterLeaf;
-		Optional<MyNode> equivalent;
+	private void mergeBack(Node node) {
+		Node child = masterLeaf;
+		Optional<Node> equivalent;
 		while ((equivalent = findNodeWithChar(child.getPredecessors(), node.getChar())).isPresent()) {
 			child = equivalent.get();
 			node = node.getPredecessors().toArray(new MyNode[]{})[0];
@@ -81,7 +102,7 @@ public class DictionaryDetrie implements Detrie {
 		node.getSuccessors().add(child);
 	} 
 
-	private Optional<MyNode> findNodeWithChar(Collection<MyNode> nodes, final Character c) {
+	private Optional<Node> findNodeWithChar(Collection<Node> nodes, final Character c) {
 		return nodes.stream().filter(node -> node.getChar().equals(c)).findAny();
 	}
 
