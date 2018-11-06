@@ -11,5 +11,6 @@ public class Main {
 				 { 0,  0,  0, 16,  0}};
 
 		System.out.println(Dijkstra.calculateDistance(new MyGraph(graph), Integer.valueOf(args[0]), Integer.valueOf(args[1])));
+		Dijkstra.findPath(new MyGraph(graph), Integer.valueOf(args[0]), Integer.valueOf(args[1])).stream().forEach(item -> System.out.print(item + (item == Integer.valueOf(args[1]) ? "" : " -> ")));
 	}
 }

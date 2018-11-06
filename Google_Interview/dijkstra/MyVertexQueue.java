@@ -20,14 +20,14 @@ public class MyVertexQueue implements VertexQueue {
 	}
 
 	@Override
-	public void reduceDistance(int vertex, int distance) {
+	public void reduceDistance(int vertex, int distance, int predecessor) {
 		Optional<VertexDistance> maybeDistance = this.queue.stream().filter(vd -> vd.vertex == vertex).findAny();
 		if (!maybeDistance.isPresent())
 			return;
 
 		if (maybeDistance.get().distance > distance) {
 			this.queue.remove(maybeDistance.get());
-			this.queue.add(new VertexDistance(vertex, distance));
+			this.queue.add(new VertexDistance(vertex, distance, predecessor));
 		}
 	}
 

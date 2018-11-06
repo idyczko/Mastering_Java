@@ -1,4 +1,5 @@
-
+import java.util.List;
+import java.util.LinkedList;
 
 public final class Dijkstra {
 
@@ -7,16 +8,31 @@ public final class Dijkstra {
 	}
 
 	public static int calculateDistance(Graph g, int source, int sink) {
-		int[] distancesToSource = new int[g.getNumberOfNodes()];
+		return calculateDistances(g, source)[sink].distance;
+	}
+
+	public static List<Integer> findPath(Graph g, int source, int sink) {
+		LinkedList<Integer> path = new LinkedList<>();
+		VertexDistance[] distances = calculateDistances(g, source);
+		path.addFirst(sink);
+		while (sink != source) {
+			sink = distances[sink].predecessor;
+			path.addFirst(sink);
+		}
+		return path;
+	}
+
+	public static VertexDistance[] calculateDistances(Graph g, int source) {
+		VertexDistance[] distancesToSource = new VertexDistance[g.getNumberOfNodes()];
 		VertexQueue queue = new MyVertexQueue(source, g.getNumberOfNodes());
 
 		while (!queue.isEmpty()) {
 			VertexDistance closest = queue.popClosestToSource();
-			distancesToSource[closest.vertex] = closest.distance; 
+			distancesToSource[closest.vertex] = closest; 
 			for (int neighbour : g.getNeighbours(closest.vertex))
-				queue.reduceDistance(neighbour, closest.distance + g.getEdgeWeight(neighbour, closest.vertex));
+				queue.reduceDistance(neighbour, closest.distance + g.getEdgeWeight(neighbour, closest.vertex), closest.vertex);
 		}
 
-		return distancesToSource[sink];
+		return distancesToSource;
 	}
 }
