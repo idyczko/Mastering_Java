@@ -20,6 +20,7 @@ public class MyGraph implements Graph {
 			if (i != node && this.graph[i][node] != 0)
 				neighbours.add(i);
 		}
+
 		return neighbours;
 	}
 

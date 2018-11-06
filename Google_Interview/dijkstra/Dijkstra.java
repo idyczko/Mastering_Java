@@ -13,10 +13,8 @@ public final class Dijkstra {
 		while (!queue.isEmpty()) {
 			VertexDistance closest = queue.popClosestToSource();
 			distancesToSource[closest.vertex] = closest.distance; 
-			for (int neighbour : g.getNeighbours(closest.vertex)) {
-				if (neighbour != source && distancesToSource[neighbour] == 0)
-					queue.reduceDistance(neighbour, closest.distance + g.getEdgeWeight(neighbour, closest.vertex));
-			}
+			for (int neighbour : g.getNeighbours(closest.vertex))
+				queue.reduceDistance(neighbour, closest.distance + g.getEdgeWeight(neighbour, closest.vertex));
 		}
 
 		return distancesToSource[sink];

@@ -22,12 +22,13 @@ public class MyVertexQueue implements VertexQueue {
 	@Override
 	public void reduceDistance(int vertex, int distance) {
 		Optional<VertexDistance> maybeDistance = this.queue.stream().filter(vd -> vd.vertex == vertex).findAny();
-	       	
 		if (!maybeDistance.isPresent())
-			throw new IllegalArgumentException("You tried to update information about a vertex which is not in the queue.");
-		
-		if (maybeDistance.get().distance > distance)
-			maybeDistance.get().distance = distance;	
+			return;
+
+		if (maybeDistance.get().distance > distance) {
+			this.queue.remove(maybeDistance.get());
+			this.queue.add(new VertexDistance(vertex, distance));
+		}
 	}
 
 	@Override
