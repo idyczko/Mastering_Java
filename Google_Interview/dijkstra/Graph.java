@@ -7,4 +7,6 @@ public interface Graph {
 	public int getEdgeWeight(int u, int v);
 
 	public int getNumberOfNodes();
+
+	public Set<Edge> getEdges();
 }

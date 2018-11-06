@@ -4,13 +4,21 @@ import java.util.HashSet;
 
 public class MyGraph implements Graph {
 	
-	int[][] graph;
+	private int[][] graph;
+	private Set<Edge> edges;
 
 	public MyGraph(int[][] graph) {
 		if (graph == null || graph.length != graph[0].length)
 			throw new IllegalArgumentException("You cannot instantiate a graph like that.");
 		
 		this.graph = graph;
+		this.edges = new HashSet<>();
+		for (int i = 0; i < this.graph.length; i++)
+			for (int j = i + 1; j < this.graph[0].length; j++)
+				if (this.graph[i][j] > 0)
+					this.edges.add(new Edge(i, j, this.graph[i][j]));
+
+		this.edges.stream().forEach(edge -> System.out.println("Edge: " +  edge.u + " <---" + edge.weight + "---> " + edge.v));
 	}
 
 	@Override
@@ -32,5 +40,10 @@ public class MyGraph implements Graph {
 	@Override
 	public int getNumberOfNodes() {
 		return this.graph.length;
+	}
+
+	@Override
+	public Set<Edge> getEdges() {
+		return this.edges;	
 	}
 }
