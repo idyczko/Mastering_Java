@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MinimalBST {
 	
@@ -12,6 +13,23 @@ public class MinimalBST {
 		sequence.stream().forEach(System.out::println);
 		System.out.println("Nodes: " + Node.counter);
 		System.out.println("Depht of the tree: " + atomicCounter);
+		System.out.println("Is tree perfectly balanced: " + checkBalanced(root, new AtomicInteger(0)));
+	}
+
+	public static boolean checkBalanced(Node node, AtomicInteger depth) {
+		if (node == null)
+			return true;
+		
+		AtomicInteger depthRight = new AtomicInteger(depth.get() + 1);
+		AtomicInteger depthLeft = new AtomicInteger(depth.get() + 1);
+		boolean left = checkBalanced(node.l, depthLeft);
+		boolean right = checkBalanced(node.r, depthRight);
+		
+		if (!left || !right || Math.abs(depthLeft.get() - depthRight.get()) != 0)
+			return false;
+
+		depth.addAndGet(Math.max(depthLeft.get(), depthRight.get()));
+		return true;
 	}
 
 	private static void inOrderTraversal(List<Integer> sequence, Node node, int depth) {
