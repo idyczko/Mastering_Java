@@ -1,4 +1,4 @@
-
+import java.util.concurrent.atomic.*;
 
 public class Tree {
 
@@ -21,6 +21,34 @@ public class Tree {
 		inOrder(n.l);
 		System.out.println(n.v);
 		inOrder(n.r);
+	}
+
+	public boolean isBST() {
+		return isBST(root, new AtomicInteger(Integer.MAX_VALUE), new AtomicInteger(Integer.MIN_VALUE));
+	}
+
+	private boolean isBST(Node n, AtomicInteger min, AtomicInteger max) {
+		if (n == null)
+			return true;
+
+		if (n.l != null && n.r != null && (n.l.v > n.v || n.r.v <= n.v))
+			return false;
+
+		AtomicInteger lMax = new AtomicInteger(Integer.MIN_VALUE);
+		AtomicInteger lMin = new AtomicInteger(Integer.MAX_VALUE);
+		AtomicInteger rMax = new AtomicInteger(Integer.MIN_VALUE);
+		AtomicInteger rMin = new AtomicInteger(Integer.MAX_VALUE);
+
+		boolean r = isBST(n.l, lMin, lMax);
+		boolean l = isBST(n.r, rMin, rMax);
+
+		if (!r || !l || n.v < lMax.get() || n.v >= rMin.get())
+			return false;
+
+		min.set(Math.min(min.get(), Math.min(lMin.get(), rMin.get())));
+		max.set(Math.max(max.get(), Math.max(lMax.get(), rMax.get())));
+
+		return true;
 	}
 
 	public Node insert(int v) {

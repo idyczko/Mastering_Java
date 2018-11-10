@@ -20,5 +20,6 @@ public class Main {
 		t.insert(15);
 		t.inOrder();
 		System.out.println(n.findSuccessor().v);
+		System.out.println(t.isBST());
 	}
 }
