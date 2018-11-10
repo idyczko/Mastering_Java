@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.*;
 
 
 public class TopologicalSort {
@@ -38,9 +39,7 @@ public class TopologicalSort {
 		}
 
 		private Set<Integer> findNodesWithoutIncomingEdges() {
-			Set<Integer> nodes = new HashSet<>();
-			for (int i = 0; i < dag.length; i++)
-				nodes.add(i);
+			Set<Integer> nodes = IntStream.range(0, dag.length).boxed().collect(Collectors.toSet());
 			for (int i = 0; i < dag.length; i++)
 				for (int j = 0; j < dag[0].length; j++)
 					if (dag[i][j] != 0) { 
