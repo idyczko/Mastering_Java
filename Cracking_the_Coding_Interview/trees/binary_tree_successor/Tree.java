@@ -24,29 +24,26 @@ public class Tree {
 	}
 
 	public boolean isBST() {
-		return isBST(root, new AtomicInteger(Integer.MAX_VALUE), new AtomicInteger(Integer.MIN_VALUE));
+		return isBST(root, new AtomicInteger(root.v), new AtomicInteger(root.v));
 	}
 
 	private boolean isBST(Node n, AtomicInteger min, AtomicInteger max) {
-		if (n == null)
-			return true;
+		AtomicInteger lMax = new AtomicInteger(n.v);
+		AtomicInteger lMin = new AtomicInteger(n.v);
+		AtomicInteger rMax = new AtomicInteger(n.v);
+		AtomicInteger rMin = new AtomicInteger(n.v);
 
-		if (n.l != null && n.r != null && (n.l.v > n.v || n.r.v <= n.v))
+		boolean l = (n.l == null ? true : isBST(n.l, lMin, lMax));
+		boolean r = (n.r == null ? true : isBST(n.r, rMin, rMax));
+
+		if (!r || !l || (n.l != null && n.v < lMax.get()) || (n.r != null && n.v >= rMin.get())) {
+			System.out.println("Returning false for node " + n.v + ". min: " + min.get() + " max: " + max.get() + " lMax: " 
+					+ lMax.get() + " rMin: " + rMin.get());
 			return false;
+		}
 
-		AtomicInteger lMax = new AtomicInteger(Integer.MIN_VALUE);
-		AtomicInteger lMin = new AtomicInteger(Integer.MAX_VALUE);
-		AtomicInteger rMax = new AtomicInteger(Integer.MIN_VALUE);
-		AtomicInteger rMin = new AtomicInteger(Integer.MAX_VALUE);
-
-		boolean r = isBST(n.l, lMin, lMax);
-		boolean l = isBST(n.r, rMin, rMax);
-
-		if (!r || !l || n.v < lMax.get() || n.v >= rMin.get())
-			return false;
-
-		min.set(Math.min(min.get(), Math.min(lMin.get(), rMin.get())));
-		max.set(Math.max(max.get(), Math.max(lMax.get(), rMax.get())));
+		min.set(Math.min(lMin.get(), rMin.get()));
+		max.set(Math.max(lMax.get(), rMax.get()));
 
 		return true;
 	}

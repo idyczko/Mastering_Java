@@ -21,5 +21,10 @@ public class Main {
 		t.inOrder();
 		System.out.println(n.findSuccessor().v);
 		System.out.println(t.isBST());
+
+		Tree t2 = new Tree();
+		t2.insert(12);
+		t2.insert(120);
+		System.out.println(t2.isBST());
 	}
 }
