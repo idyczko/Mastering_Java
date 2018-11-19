@@ -5,7 +5,7 @@ public class Main {
 	
 		BST tree = new BST(10);
 		tree.insert(5);
-		tree.insert(1);
+		BST.Node t = tree.insert(1);
 		tree.insert(3);
 		tree.insert(11);
 		tree.insert(10);
@@ -16,7 +16,8 @@ public class Main {
 		BST.Node q = tree.insert(13);
 		tree.insert(16);
 		tree.insert(15);
-
-		System.out.println("Common ancestor of p and q: " + tree.findCommonAncestor(p, q).v);
+		
+		tree.inOrder();
+		System.out.println("Common ancestor of p and q: " + tree.findCommonAncestor(q, tree.root).v);
 	}
 }

@@ -1,7 +1,7 @@
 
 public class BST {
 
-	private Node root;
+	public Node root;
 
 	public BST(int i) {
 		this.root = new Node(i);
@@ -17,11 +17,15 @@ public class BST {
 	public Node insert(Node parent, Node newNode) {
 		boolean goLeft = parent.v >= newNode.v;
 		
-		if (goLeft && parent.l == null)
+		if (goLeft && parent.l == null) {
+			newNode.p = parent;
 			return parent.l = newNode;
+		}
 
-		if (!goLeft && parent.r == null)
+		if (!goLeft && parent.r == null) {
+			newNode.p = parent;
 			return parent.r = newNode;
+		}
 
 		return insert(goLeft ? parent.l : parent.r, newNode);
 	}
@@ -36,10 +40,26 @@ public class BST {
 		return commonAncestor(p, q);
 	}
 
+	public void inOrder() {
+		inOrder(this.root);
+	}
+
+	private void inOrder(Node node) {
+		if (node == null)
+			return;
+
+		inOrder(node.l);
+		System.out.println(node.v);
+		inOrder(node.r);
+	}
+
 	private Node commonAncestor(Node p, Node q) {
+		if (p == q)
+			return p;
+
 		if (p.p == null)
 			return null;
-
+		
 		if (covers(p.getSibling(), q))
 			return p.p;
 
