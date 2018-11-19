@@ -40,6 +40,26 @@ public class BST {
 		return commonAncestor(p, q);
 	}
 
+	public Node findCommonAncestorWithoutParentLink(Node p, Node q) {
+		if (!covers(root, p) || !covers(root, q))
+			return null;
+
+		return findCAWPL(root, p, q);
+	}
+
+	public Node findCAWPL(Node parent, Node p, Node q) {
+		if (parent == p || parent == q || parent == null)
+			return parent;
+
+		boolean pIsLeft = covers(parent.l, p);
+		boolean qIsLeft = covers(parent.l, q);
+
+		if (pIsLeft != qIsLeft)
+			return parent;
+
+		return findCAWPL(pIsLeft ? parent.l : parent.r, p, q);
+	}
+
 	public void inOrder() {
 		inOrder(this.root);
 	}
