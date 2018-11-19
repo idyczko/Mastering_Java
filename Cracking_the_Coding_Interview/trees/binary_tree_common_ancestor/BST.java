@@ -43,14 +43,14 @@ public class BST {
 	public Node findCommonAncestorWithoutParentLink(Node p, Node q) {
 		if (!covers(root, p) || !covers(root, q))
 			return null;
+		
+		if (root == p || root == q)
+			return root;
 
 		return findCAWPL(root, p, q);
 	}
 
 	public Node findCAWPL(Node parent, Node p, Node q) {
-		if (parent == p || parent == q || parent == null)
-			return parent;
-
 		boolean pIsLeft = covers(parent.l, p);
 		boolean qIsLeft = covers(parent.l, q);
 
