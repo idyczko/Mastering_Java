@@ -18,8 +18,8 @@ public class Main {
 		tree.insert(15);
 		
 		tree.inOrder();
-		System.out.println("Common ancestor of p and q: " + tree.findCommonAncestor(q, tree.root).v);
-		System.out.println("Common ancestor of p and q: " + tree.findCommonAncestorWithoutParentLink(q, t).v);
-		System.out.println("Common ancestor of p and q: " + tree.findCommonAncestorWithoutParentLink(q, tree.root).v);
+		System.out.println("Common ancestor of p and q: " + tree.findAncestorSmart(tree.root, p).v);
+		System.out.println("Common ancestor of p and q: " + tree.findAncestorSmart(q, tree.root).v);
+		System.out.println("Common ancestor of p and q: " + tree.findAncestorSmart(q, p).v);
 	}
 }

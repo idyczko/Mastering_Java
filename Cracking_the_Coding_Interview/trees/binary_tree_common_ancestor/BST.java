@@ -50,7 +50,35 @@ public class BST {
 		return findCAWPL(root, p, q);
 	}
 
-	public Node findCAWPL(Node parent, Node p, Node q) {
+	public Node findAncestorSmart(Node p, Node q) {
+
+		return findAncestorSmart(root, p, q);
+	}
+
+	private Node findAncestorSmart(Node root, Node p, Node q) {
+		if (root == null)
+			return null;
+		if (root == p && root == q)
+			return root;
+
+		Node findL = findAncestorSmart(root.l, p, q);
+		if (findL != null && findL != p && findL != q)
+			return findL;
+
+		Node findR = findAncestorSmart(root.r, p, q);
+		if (findR != null && findR != p && findR != q)
+			return findR;
+
+		if (findL != null && findR != null)
+			return root;
+		else if (root == p || root == q)
+			return root;
+		else
+			return findL == null ? findR : findL;
+	}
+
+
+	private Node findCAWPL(Node parent, Node p, Node q) {
 		boolean pIsLeft = covers(parent.l, p);
 		boolean qIsLeft = covers(parent.l, q);
 
