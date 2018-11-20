@@ -52,29 +52,31 @@ public class BST {
 
 	public Node findAncestorSmart(Node p, Node q) {
 
-		return findAncestorSmart(root, p, q);
+		Result r = findAncestorSmart(root, p, q);
+		return r.isAncestor ? r.ancestor : null;
 	}
 
-	private Node findAncestorSmart(Node root, Node p, Node q) {
+	private Result findAncestorSmart(Node root, Node p, Node q) {
 		if (root == null)
-			return null;
+			return new Result(false, null);
+
 		if (root == p && root == q)
-			return root;
+			return new Result(true, root);
 
-		Node findL = findAncestorSmart(root.l, p, q);
-		if (findL != null && findL != p && findL != q)
-			return findL;
+		Result x = findAncestorSmart(root.l, p, q);
+		if (x.isAncestor)
+			return x;
 
-		Node findR = findAncestorSmart(root.r, p, q);
-		if (findR != null && findR != p && findR != q)
-			return findR;
+		Result y = findAncestorSmart(root.r, p, q);
+		if (y.isAncestor)
+			return y;
 
-		if (findL != null && findR != null)
-			return root;
+		if (x.ancestor != null && y.ancestor != null)
+			return new Result(true, root);
 		else if (root == p || root == q)
-			return root;
+			return new Result(x.ancestor != null || y.ancestor != null, root);
 		else
-			return findL == null ? findR : findL;
+			return x.ancestor == null ? y : x;
 	}
 
 
@@ -121,6 +123,16 @@ public class BST {
 			return true;
 
 		return covers(covering.l, covered) || covers(covering.r, covered);
+	}
+
+	private class Result {
+		boolean isAncestor;
+		Node ancestor;
+
+		Result(boolean isAncestor, Node ancestor) {
+		this.isAncestor = isAncestor;
+		this.ancestor = ancestor;
+		}
 	}
 
 	public static class Node {
