@@ -24,9 +24,12 @@ public class BST {
 	private ArrayList<LinkedList<Integer>> allSequences(Node node) {
 		if (node == null)
 			return new ArrayList<LinkedList<Integer>>();
-
+		log(node.v);
 		ArrayList<LinkedList<Integer>> left = allSequences(node.l);
 		ArrayList<LinkedList<Integer>> right = allSequences(node.r);
+		
+		if (left.isEmpty() && right.isEmpty())
+			return new ArrayList<> (Collections.singletonList(new LinkedList<Integer>(Collections.singletonList(node.v))));
 
 		return new ArrayList<>(weaveSequences(left, right).stream().peek(seq -> seq.addFirst(node.v)).collect(Collectors.toList()));
 	}
@@ -44,22 +47,35 @@ public class BST {
 		return result;
 	}
 
-	private ArrayList<LinkedList<Integer>> weave(LinkedList<Integer> l, LinkedList<Integer> r) {
+	public ArrayList<LinkedList<Integer>> weave(LinkedList<Integer> l, LinkedList<Integer> r) {
 		if (l.isEmpty() || r.isEmpty())
 			return new ArrayList<> (Collections.singletonList(l.isEmpty() ? r : l));
-
+		
+		//log(l);
+		//log(r);
 		ArrayList<LinkedList<Integer>> result = new ArrayList<>();
 		Integer lhead = l.getFirst();
 		l.removeFirst();
-		result.addAll(weave(l, r).stream().peek(s -> s.addFirst(lhead)).collect(Collectors.toList()));
+		result.addAll(weave(new LinkedList<>(l), new LinkedList<>(r)).stream().peek(s -> s.addFirst(lhead)).collect(Collectors.toList()));
 		l.addFirst(lhead);
 
 		Integer rhead = r.getFirst();
 		r.removeFirst();
-		result.addAll(weave(l, r).stream().peek(s -> s.addFirst(rhead)).collect(Collectors.toList()));
+		result.addAll(weave(new LinkedList<>(l), new LinkedList<>(r)).stream().peek(s -> s.addFirst(rhead)).collect(Collectors.toList()));
 		r.addFirst(rhead);
-
+		//result.forEach(i -> log(i));
 		return result;
+	}
+
+	private void log(Object o) {
+		if (o instanceof Collection) {
+			System.out.print("[ ");
+			((Collection) o).forEach(i -> System.out.print(i + " "));
+			System.out.print("]\n");
+			return;
+		}
+		System.out.println(o);
+		
 	}
 
 	private void weave(Node node, List<Integer> seq, Set<Node> moves) {

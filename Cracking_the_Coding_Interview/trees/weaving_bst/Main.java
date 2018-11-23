@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class Main {
 
@@ -15,5 +16,6 @@ public class Main {
 		tree.weave();
 		System.out.println("Alternative:");
 		tree.weaveAlt();
+		//tree.weave(new LinkedList<>(Arrays.asList(1, 2, 3, 4)), new LinkedList<>(Arrays.asList(5, 6, 7, 8)));
 	}
 }
