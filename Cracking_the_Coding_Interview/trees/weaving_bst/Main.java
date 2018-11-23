@@ -13,5 +13,7 @@ public class Main {
 		tree.inOrder();
 
 		tree.weave();
+		System.out.println("Alternative:");
+		tree.weaveAlt();
 	}
 }

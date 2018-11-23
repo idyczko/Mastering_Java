@@ -57,7 +57,8 @@ public class BST {
 		Integer rhead = r.getFirst();
 		r.removeFirst();
 		result.addAll(weave(l, r).stream().peek(s -> s.addFirst(rhead)).collect(Collectors.toList()));
-		
+		r.addFirst(rhead);
+
 		return result;
 	}
 
