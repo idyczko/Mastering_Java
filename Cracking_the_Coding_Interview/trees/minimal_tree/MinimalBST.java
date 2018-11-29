@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.*;
 
 public class MinimalBST {
 	
@@ -30,6 +31,21 @@ public class MinimalBST {
 
 		depth.addAndGet(Math.max(depthLeft.get(), depthRight.get()));
 		return true;
+	}
+
+	public static String stringify(Node node) {
+		return preOrderStringify(node, new LinkedList<>()).stream().map(n -> n != null ? String.valueOf(n.v) : "X").collect(Collectors.joining(" "));
+	}
+
+	private static LinkedList<Node> preOrderStringify(Node node, LinkedList<Node> seq) {
+		seq.addLast(node);
+
+		if (node == null)
+			return seq;
+
+		preOrderStringify(node.l, seq);
+		preOrderStringify(node.r, seq);
+		return seq;
 	}
 
 	private static void inOrderTraversal(List<Integer> sequence, Node node, int depth) {

@@ -11,5 +11,6 @@ public class Main {
 						new MinimalBST.Node(3, null,
 							new MinimalBST.Node(4, null, null)))));
 		System.out.println("Is Main tree balanced: " + MinimalBST.checkBalanced(unbalanced, new AtomicInteger(0)));
+		System.out.println(MinimalBST.stringify(unbalanced));
 	}
 }
