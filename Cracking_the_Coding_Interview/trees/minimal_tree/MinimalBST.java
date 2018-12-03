@@ -37,6 +37,26 @@ public class MinimalBST {
 		return preOrderStringify(node, new LinkedList<>()).stream().map(n -> n != null ? String.valueOf(n.v) : "X").collect(Collectors.joining(" "));
 	}
 
+	public static boolean isSubtree(Node superTree, Node subTree) {
+		Node node = superTree;
+		while ((node = find(node, subTree.v)) != null) {
+			if (stringify(node).equals(stringify(subTree)))
+				return true;
+			node = node.v < subTree.v ? node.r : node.l;
+		}
+		return false;
+	}
+
+	public static Node find(Node node, int v) {
+		if (node == null)
+			return null;
+
+		if (node.v == v)
+			return node;
+
+		return node.v < v ? find(node.r, v) : find(node.l, v);
+	}
+
 	private static LinkedList<Node> preOrderStringify(Node node, LinkedList<Node> seq) {
 		seq.addLast(node);
 
