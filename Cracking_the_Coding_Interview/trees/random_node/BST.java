@@ -39,7 +39,7 @@ public class BST {
 	}
 
 	public Node random() {
-		int index = (int) (Math.random() * root.size);
+		int index = (int) (Math.random() * root.size) + 1;
 		return get(index);
 	}
 
@@ -50,7 +50,7 @@ public class BST {
 	public Node get(Node node, int index) {
 		int rightIndex = index - (node.l != null ? node.l.size : 0) - 1;
 		System.out.println("Node: " + node.v + " index: " + index + " right index: " + rightIndex);
-		return rightIndex == 0 ? node : (rightIndex > 0 ? get(node.r, rightIndex) : (node.l != null ? get(node.l, index) : node));
+		return rightIndex == 0 ? node : (rightIndex > 0 ? get(node.r, rightIndex) : get(node.l, index));
 	}
 	
 }
