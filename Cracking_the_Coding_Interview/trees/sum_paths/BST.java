@@ -65,10 +65,13 @@ public class BST {
 
 		sequences.forEach(seq -> seq.addLast(node));
 		sequences.add(new LinkedList<>(Collections.singletonList(node)));
-		sequences.stream().filter(seq -> seq.stream().mapToInt(n -> n.v).sum() == sum).forEach(seq -> System.out.println(seq.stream().map(n -> String.valueOf(n.v)).collect(Collectors.joining(" "))));
+		sequences.stream().filter(seq -> seq.stream().mapToInt(n -> n.v).sum() == sum).forEach(
+				seq -> System.out.println(seq.stream().map(n -> String.valueOf(n.v)).collect(Collectors.joining(" "))));
 
-		sumPaths(node.l, sum, new LinkedList<>(sequences.stream().map(seq -> new LinkedList<>(seq)).collect(Collectors.toList())));
-		sumPaths(node.r, sum, sequences);
+		sumPaths(node.l, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v <= 0 && seq.stream().mapToInt(n -> n.v).sum() < sum))
+					.map(seq -> new LinkedList<>(seq)).collect(Collectors.toList())));
+		sumPaths(node.r, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v > 0 && seq.stream().mapToInt(n -> n.v).sum() > sum))
+					.collect(Collectors.toList())));
 	}
 	
 }
