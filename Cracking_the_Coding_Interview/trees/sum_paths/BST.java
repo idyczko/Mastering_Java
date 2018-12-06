@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.stream.*;
+import java.util.concurrent.atomic.*;
 
 public class BST {
 	
@@ -57,23 +58,61 @@ public class BST {
 
 	public void sumPaths(int sum) {
 		sumPaths(root, sum, new LinkedList<>());
+		System.out.println("Created instances: " + SumPath.instances.get() + " Max instances: " + SumPath.maxInstances);
 	}
 
-	private void sumPaths(Node node, int sum, LinkedList<LinkedList<Node>> sequences) {
+	private void sumPaths(Node node, int sum, LinkedList<SumPath> sequences) {
 		if (node == null)
 			return;
 
-		sequences.forEach(seq -> seq.addLast(node));
-		sequences.add(new LinkedList<>(Collections.singletonList(node)));
-		sequences.stream().filter(seq -> seq.stream().mapToInt(n -> n.v).sum() == sum).forEach(
-				seq -> System.out.println(seq.stream().map(n -> String.valueOf(n.v)).collect(Collectors.joining(" "))));
+		sequences.forEach(seq -> seq.append(node));
+		sequences.add(new SumPath(node));
+		sequences.stream().filter(seq -> seq.sum == sum).forEach(SumPath::print);
 
-		sumPaths(node.l, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v <= 0 && seq.stream().mapToInt(n -> n.v).sum() < sum))
-					.map(seq -> new LinkedList<>(seq)).collect(Collectors.toList())));
-		sumPaths(node.r, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v > 0 && seq.stream().mapToInt(n -> n.v).sum() > sum))
+		sumPaths(node.l, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v <= 0 && seq.sum < sum))
+					.map(seq -> new SumPath(seq)).collect(Collectors.toList())));
+		sumPaths(node.r, sum, new LinkedList<>(sequences.stream().filter(seq -> !(node.v > 0 && seq.sum > sum))
 					.collect(Collectors.toList())));
 	}
+
+	public static class SumPath extends LinkedList<Node> {
 	
+		static Integer maxInstances = 0;
+		static AtomicInteger instances = new AtomicInteger(0);
+		int sum;
+
+		SumPath(SumPath s) {
+			super(s);
+			synchronized (maxInstances) {
+				if (maxInstances < instances.incrementAndGet())
+					maxInstances = instances.get();
+			}
+			this.sum = s.sum;
+		}
+
+		SumPath(Node n) {
+			super(Collections.singletonList(n));
+			synchronized (maxInstances) {
+				if (maxInstances < instances.incrementAndGet())
+					maxInstances = instances.get();
+			}
+			this.sum = n.v;
+		}
+		
+		void append(Node n) {
+			sum += n.v;
+			addLast(n);	
+		}
+
+		void print() {
+			 System.out.println(this.stream().map(n -> String.valueOf(n.v)).collect(Collectors.joining(" ")));
+		}
+
+		@Override
+		protected void finalize() {
+			instances.decrementAndGet();
+		}
+	}	
 }
 
 class Node {
