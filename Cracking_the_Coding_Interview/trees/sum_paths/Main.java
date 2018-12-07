@@ -7,5 +7,6 @@ public class Main {
 		tree.insert(4).insert(3).insert(2).insert(1).insert(6).insert(7).insert(5).insert(4).insert(1).insert(1).insert(1).insert(-3);
 
 		tree.sumPaths(10);
+		System.out.println("Number of paths summing to 10: " + tree.countSumPaths(10));
 	}
 }

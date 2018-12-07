@@ -75,6 +75,26 @@ public class BST {
 					.collect(Collectors.toList())));
 	}
 
+	public int countSumPaths(int sum) {
+		HashMap<Integer, Integer> lengths = new HashMap<>();
+		lengths.put(0, 1);
+		return countSumPaths(sum, root, 0, lengths);
+	}
+
+	private int countSumPaths(int target, Node node, int running, HashMap<Integer, Integer> pathLengths) {
+		if (node == null)
+			return 0;
+
+		running += node.v;
+		
+		if (pathLengths.containsKey(running))
+			pathLengths.put(running, pathLengths.get(running) + 1);
+		else
+			pathLengths.put(running, 1);
+
+		return pathLengths.getOrDefault(running - target, 0) + countSumPaths(target, node.l, running, new HashMap<>(pathLengths)) + countSumPaths(target, node.r, running, pathLengths);
+	}
+
 	public static class SumPath extends LinkedList<Node> {
 	
 		static Integer maxInstances = 0;
