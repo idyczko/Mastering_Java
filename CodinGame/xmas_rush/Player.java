@@ -62,12 +62,20 @@ class Player {
         String itemTile = tiles[items[0][0]][items[0][1]];
         List<Integer[]> docks = getDockingPoints(tiles, players[0][0], players[0][1], items[0][0], items[0][1]);
         if (docks.isEmpty())
-            return keepItemClose(players, items);
+            return movePlayerTowardsCenter(players);
         for (Integer[] dock : docks)
             System.err.println("Found docking point: " + dock[0] + " " + dock[1]);
         Integer[] closestDock = findClosestDock(docks, items[0][0], items[0][1]);
         System.err.println("Closest docking point: " + closestDock[0] + " " + closestDock[1]);
         return calculateDockMove(closestDock, players, items);
+    }
+
+    private static String movePlayerTowardsCenter(int[][] players) {
+        int xDiff = players[0][0] - 3;
+        int yDiff = players[0][1] - 3;
+        boolean goHorizontal = abs(xDiff) > abs(yDiff);
+        return "PUSH " + (goHorizontal ? (players[0][1] + (xDiff > 0 ? " LEFT" : " RIGHT")) :
+            (players[0][0] + (yDiff > 0 ? " UP" : " DOWN")));
     }
 
     private static String calculateDockMove(Integer[] closestDock, int[][] players, int[][] items) {
