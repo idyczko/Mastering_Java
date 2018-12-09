@@ -68,14 +68,31 @@ class Player {
             if(turnType == 0)
                 pushMove = getToTheDockingPoint(tiles, players, targetItem);
             else
-                move = calculateMove(tiles, players, targetItem);
+                move = calculateMove();
 
-            System.out.println(turnType == 0 ? pushMove : (move == null ? "PASS" : move));
+            System.out.println(turnType == 0 ? pushMove : ("".equals(move) ? "PASS" : ("MOVE " + move.trim())));
 
             myItems.clear();
             activeQuests.clear();
             activeItems.clear();
         }
+    }
+
+    private static String calculateMove() {
+      String move = "";
+      Point start = p1;
+      while (move.split(" ").length <= 20) {
+        Tree map = new Tree(start);
+        List<String> pathsToActiveItems = activeItems.stream()
+            .map(p -> map.getPath(p))
+            .filter(Objects::nonNull)
+            .sorted((p1, p2) -> Integer.compare(p1.split(" ").length, p2.split(" ").length))
+            .collect(Collectors.toList());
+        if (pathsToActiveItems.isEmpty())
+          return move;
+        return pathsToActiveItems.get(0);
+      }
+      return null;
     }
 
     private static String getToTheDockingPoint(String[][] tiles, int[][] players, int[] item) {
