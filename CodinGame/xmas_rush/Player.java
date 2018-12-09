@@ -59,10 +59,10 @@ class Player {
             }
 
             activeItems = activeQuests.stream().map(quest -> myItems.get(quest)).collect(Collectors.toList());
-            map = new Tree(p1);
+            map = new Tree(p1, 20);
 
-            System.err.println("Paths to active items: ");
-            activeItems.forEach(i -> System.err.println(map.getPath(i)));
+            //System.err.println("Paths to active items: ");
+            //activeItems.forEach(i -> System.err.println(map.getPath(i)));
             int[] targetItem = new int[] {activeItems.get(0).x, activeItems.get(0).y};
             System.err.println("Target item: " + targetItem[0] + " " + targetItem[1]);
             if(turnType == 0)
@@ -81,18 +81,29 @@ class Player {
     private static String calculateMove() {
       String move = "";
       Point start = p1;
-      while (move.split(" ").length <= 20) {
-        Tree map = new Tree(start);
-        List<String> pathsToActiveItems = activeItems.stream()
-            .map(p -> map.getPath(p))
-            .filter(Objects::nonNull)
-            .sorted((p1, p2) -> Integer.compare(p1.split(" ").length, p2.split(" ").length))
-            .collect(Collectors.toList());
-        if (pathsToActiveItems.isEmpty())
+      int depth = 20;
+      while (true) {
+        Tree map = new Tree(start, depth);
+        String tmpmove = null;
+        Point point = null;
+        for (Point item : activeItems) {
+          String path = map.getPath(item);
+          if (path == null)
+            continue;
+          if (tmpmove == null || path.split(" ").length < tmpmove.split(" ").length) {
+            tmpmove = path;
+            point = item;
+          }
+        }
+        System.err.println("Move: " + tmpmove);
+        if (tmpmove == null)
           return move;
-        return pathsToActiveItems.get(0);
+        activeItems.remove(point);
+        move += tmpmove;
+        depth -= map.reachablePoints.get(point).distanceFromRoot;
+        start = point;
       }
-      return null;
+
     }
 
     private static String getToTheDockingPoint(String[][] tiles, int[][] players, int[] item) {
@@ -255,12 +266,12 @@ class Player {
     public static class Tree {
       Map<Point, Node> reachablePoints = new HashMap<>();
 
-      Tree(Point start) {
+      Tree(Point start, int depth) {
         Queue<QueueInfo> queue = new LinkedList<>();
         queue.add(new QueueInfo("", start, 0));
         while (!queue.isEmpty()) {
           QueueInfo qi = queue.poll();
-          if (qi.depth > 20)
+          if (qi.depth > depth)
             return;
 
           if (reachablePoints.containsKey(qi.p))
