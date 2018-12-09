@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.util.stream.*;
 import java.math.*;
 import static java.lang.Math.*;
 
@@ -7,17 +8,19 @@ import static java.lang.Math.*;
  * Help the Christmas elves fetch presents in a magical labyrinth!
  **/
 class Player {
-
+    public static String[][] tiles = new String[7][7];
+    public static Map<String, Point> myItems = new HashMap<>();
+    public static List<String> activeQuests = new ArrayList<>();
+    public static List<Point> activeItems = new ArrayList<>();
+    public static Point p1 = new Point(0,0);
+    public static Point p2 = new Point(0,0);
+    public static Tree map;
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         int [][] items = new int[2][2];
         int [][] players = new int[2][2];
-        String[][] tiles = new String[7][7];
         String pushMove = "";
         String move = "";
-        Map<String, Integer[]> myItems = new HashMap<>();
-        boolean init = true;
-
 
         // game loop
         while (true) {
@@ -31,8 +34,10 @@ class Player {
                 int numPlayerCards = in.nextInt(); // the total number of quests for a player (hidden and revealed)
                 int playerX = in.nextInt();
                 int playerY = in.nextInt();
-                players[i][0] = playerX;
-                players[i][1] = playerY;
+
+                Point pl = i == 0 ? p1 : p2;
+                pl.x = playerX;
+                pl.y = playerY;
                 String playerTile = in.next();
             }
             int numItems = in.nextInt(); // the total number of items available on board and on player tiles
@@ -41,21 +46,11 @@ class Player {
                 int itemX = in.nextInt();
                 int itemY = in.nextInt();
                 int itemPlId = in.nextInt();
-                items[itemPlId][0] = itemX;
-                items[itemPlId][1] = itemY;
+
                 if (itemPlId == 0)
-                    myItems.put(itemName, new Integer[] {itemX, itemY});
+                    myItems.put(itemName, new Point(itemX, itemY));
             }
             int numQuests = in.nextInt(); // the total number of revealed quests for both players
-            PriorityQueue<String> activeQuests = new PriorityQueue<>(6, new Comparator<String>() {
-
-                @Override
-                public int compare(String s1, String s2) {
-
-                  return distance(players[0][0], players[0][1], myItems.get(s1)[0], myItems.get(s1)[1])
-                            - distance(players[0][0], players[0][1], myItems.get(s2)[0], myItems.get(s2)[1]);
-                }
-            });
             for (int i = 0; i < numQuests; i++) {
                 String questItemName = in.next();
                 int questPlayerId = in.nextInt();
@@ -63,15 +58,23 @@ class Player {
                     activeQuests.add(questItemName);
             }
 
-            // Write an action using System.out.println()
-            // To debug: System.err.println("Debug messages...");
-            int[] targetItem = new int[] {myItems.get(activeQuests.peek())[0], myItems.get(activeQuests.peek())[1]};
-            System.err.println("Target item: " + activeQuests.peek() + targetItem[0] + " " + targetItem[1]);
+            activeItems = activeQuests.stream().map(quest -> myItems.get(quest)).collect(Collectors.toList());
+            map = new Tree(p1);
+
+            System.err.println("Paths to active items: ");
+            activeItems.forEach(i -> System.err.println(map.getPath(i)));
+            int[] targetItem = new int[] {activeItems.get(0).x, activeItems.get(0).y};
+            System.err.println("Target item: " + targetItem[0] + " " + targetItem[1]);
             if(turnType == 0)
                 pushMove = getToTheDockingPoint(tiles, players, targetItem);
             else
                 move = calculateMove(tiles, players, targetItem);
-            System.out.println(turnType == 0 ? pushMove : (move == null ? "PASS" : move)); // PUSH <id> <direction> | MOVE <direction> | PASS
+
+            System.out.println(turnType == 0 ? pushMove : (move == null ? "PASS" : move));
+
+            myItems.clear();
+            activeQuests.clear();
+            activeItems.clear();
         }
     }
 
@@ -138,6 +141,11 @@ class Player {
       return abs(x1 - x2) + abs(y1 - y2);
     }
 
+    private static String calculateMove(String[][] tiles, int[][] players, int[] item) {
+        int [][] visited = new int[7][7];
+        return calculateMove(tiles, players, item, players[0][0], players[0][1], "MOVE", visited);
+    }
+
     private static List<Integer[]> getDockingPoints(String[][] tiles, int px, int py, int tx, int ty) {
         List<Integer[]> docks = new ArrayList<>();
         String playerTile = tiles[px][py];
@@ -171,17 +179,12 @@ class Player {
         return "PUSH " + players[1][0] + " DOWN";
     }
 
-    private static String calculateMove(String[][] tiles, int[][] players, int[] item) {
-        int [][] visited = new int[7][7];
-        return calculateMove(tiles, players, item, players[0][0], players[0][1], "MOVE", visited);
-    }
-
     private static String calculateMove(String[][] tiles, int[][] players, int[] item,
                                         int x, int y, String parent, int[][] visited) {
         if (visited[x][y] == 1)
             return null;
 
-        if (!parent.equals("MOVE") && parentUnreachable(parent, tiles[x][y]))
+        if (!parent.equals("MOVE") && !parentReachable(parent, tiles[x][y]))
             return null;
 
         visited[x][y] = 1;
@@ -209,10 +212,112 @@ class Player {
         return result != null ? (parent + " " + result) : null;
     }
 
-    public static boolean parentUnreachable(String parent, String tile) {
-      return parent.equals("DOWN") && tile.charAt(0) == '0'||
-          parent.equals("LEFT") && tile.charAt(1) == '0' ||
-          parent.equals("UP") && tile.charAt(2) == '0' ||
-          parent.equals("RIGHT") && tile.charAt(3) == '0';
+    public static boolean parentReachable(String parentMove, String tile) {
+      return parentMove.equals("DOWN") && tile.charAt(0) == '0'||
+          parentMove.equals("LEFT") && tile.charAt(1) == '0' ||
+          parentMove.equals("UP") && tile.charAt(2) == '0' ||
+          parentMove.equals("RIGHT") && tile.charAt(3) == '0';
+    }
+
+    private static String getTile(Point p) {
+      return tiles[p.x][p.y];
+    }
+
+    private static Point getPoint(Point p, String directive) {
+      int y = "UP".equals(directive) ? -1 : "DOWN".equals(directive) ? 1 : 0;
+      int x = "RIGHT".equals(directive) ? 1 : "LEFT".equals(directive) ? -1 : 0;
+      return new Point(p.x + x, p.y + y);
+    }
+
+    private static Point getParentPoint(Point p, String parentDirective) {
+      int y = "UP".equals(parentDirective) ? 1 : "DOWN".equals(parentDirective) ? -1 : 0;
+      int x = "RIGHT".equals(parentDirective) ? -1 : "LEFT".equals(parentDirective) ? 1 : 0;
+      return new Point(p.x + x, p.y + y);
+    }
+
+    public static class Tree {
+      Map<Point, Node> reachablePoints = new HashMap<>();
+
+      Tree(Point start) {
+        Queue<QueueInfo> queue = new LinkedList<>();
+        queue.add(new QueueInfo("", start, 0));
+        while (!queue.isEmpty()) {
+          QueueInfo qi = queue.poll();
+          if (qi.depth > 20)
+            return;
+
+          if (reachablePoints.containsKey(qi.p))
+            continue;
+
+          reachablePoints.put(qi.p, new Node(qi.parentMove, qi.depth));
+          String tile = getTile(qi.p);
+          if (qi.p.y > 0 && tile.charAt(0) == '1' && tiles[qi.p.x][qi.p.y - 1].charAt(2) == '1')
+            queue.add(new QueueInfo("UP", new Point(qi.p.x, qi.p.y -1), qi.depth + 1));
+          if (qi.p.x < 6 && tile.charAt(1) == '1' && tiles[qi.p.x + 1][qi.p.y].charAt(3) == '1')
+            queue.add(new QueueInfo("RIGHT", new Point(qi.p.x + 1, qi.p.y), qi.depth + 1));
+          if (qi.p.y < 6 && tile.charAt(2) == '1' && tiles[qi.p.x][qi.p.y + 1].charAt(0) == '1')
+            queue.add(new QueueInfo("DOWN", new Point(qi.p.x, qi.p.y + 1), qi.depth + 1));
+          if (qi.p.x > 0 && tile.charAt(3) == '1' && tiles[qi.p.x - 1][qi.p.y].charAt(1) == '1')
+            queue.add(new QueueInfo("LEFT", new Point(qi.p.x - 1, qi.p.y), qi.depth + 1));
+        }
+      }
+
+      String getPath(Point p) {
+        return reachablePoints.containsKey(p) ? getPath(p, "") : null;
+      }
+      String getPath(Point p, String path) {
+        Node node = reachablePoints.get(p);
+        return "".equals(node.parentMove) ? path : getPath(getParentPoint(p, node.parentMove), node.parentMove + " " + path);
+      }
+    }
+
+    public static class QueueInfo {
+      String parentMove;
+      Point p;
+      int depth;
+
+      QueueInfo(String parentMove, Point p, int depth){
+        this.parentMove = parentMove;
+        this.p = p;
+        this.depth = depth;
+      }
+    }
+
+    public static class Node {
+      int distanceFromRoot;
+      String parentMove;
+
+      Node (String parentMove, int distanceFromRoot) {
+        this.parentMove = parentMove;
+        this.distanceFromRoot = distanceFromRoot;
+      }
+
+    }
+
+    public static class Point {
+      int x;
+      int y;
+
+      Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+      }
+
+      Point(int[] point) {
+        this.x = point[0];
+        this.y = point[1];
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        Point p = (Point) o;
+        return this.x == p.x && this.y == p.y;
+      }
+
+      @Override
+      public int hashCode(){
+        return this.x * 13 + this.y * 19;
+      }
+
     }
 }
