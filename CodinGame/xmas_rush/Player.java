@@ -88,7 +88,8 @@ class Player {
 
       int xDiff = closestDock[0] - items[0][0];
       int yDiff = closestDock[1] - items[0][1];
-      boolean goHorizontal = abs(xDiff) > abs(yDiff);
+      boolean goHorizontal = abs(xDiff) != abs(yDiff) ? abs(xDiff) > abs(yDiff) :
+            (abs(items[0][1] - players[0][1]) == 1);
       return "PUSH " + (goHorizontal ? (items[0][1] + (xDiff > 0 ? " RIGHT" : " LEFT")) :
         (items[0][0] + (yDiff > 0 ? " DOWN" : " UP")));
     }
