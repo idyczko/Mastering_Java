@@ -1,0 +1,2 @@
+1. If blocked with opponent - change strategy if losing/draw.
+2. Extend docking points. Perhaps look simultaneously from player and item?
