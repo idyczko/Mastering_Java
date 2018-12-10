@@ -17,6 +17,7 @@ class Player {
     public static String myPreviousTile;
     public static String myTile;
     public static Tree map;
+    public static boolean escapeTile = false;
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
@@ -89,10 +90,12 @@ class Player {
       int depth = 20;
       while (true) {
         Tree map = new Tree(start, depth);
+
         String itemMove = null;
         String itemName = null;
         Point point = null;
         for (Map.Entry<String, Point> item : activeItems.entrySet()) {
+          System.err.println("Active item: " + item.getValue().x + " " + item.getValue().y);
           String path = map.getPath(item.getValue());
           if (path == null)
             continue;
@@ -103,8 +106,27 @@ class Player {
           }
         }
         System.err.println("Move: " + itemMove);
-        if (itemMove == null)
-          return move;
+        if (itemMove == null) {
+          if ("".equals(move) && escapeTile) {
+            System.err.println("Escaping tile!");
+            Point p = map.findClosestReachable(new ArrayList<>(activeItems.values()));
+            if (p.equals(p1)) {
+              Optional<Point> opt = map.reachablePoints.keySet().stream().filter(po -> !po.equals(p1)).findFirst();
+              if (opt.isPresent())
+                p = opt.get();
+            }
+            if (p == null || p.equals(p1))
+              return null;
+
+            move = map.getPath(p);
+            if (move != null)
+              escapeTile = false;
+            return move;
+          } else {
+            escapeTile = false;
+            return move;
+          }
+        }
         activeItems.remove(itemName);
         myItems.remove(itemName);
         move += itemMove;
@@ -115,15 +137,21 @@ class Player {
     }
 
     private static String getToTheDockingPoint() {
-        Point target = activeItems.values().stream().findFirst().get();
+        Point target = null;
+        List<Point> docks = null;
+        for (Point item : activeItems.values())
+          if (item.x >= 0 && !(docks = getDockingPoints(item)).isEmpty()) {
+            target = item;
+            break;
+          }
+
+        if (docks == null || docks.isEmpty()) {
+          if (p1.x == 0 || p1.x == 6 || p1.y == 0 || p1.y == 6)
+            escapeTile = true;
+          return movePlayerTowardsCenter();
+        }
+
         System.err.println("Target point: " + target.x + " " + target.y);
-        if (target.x < 0)
-            return movePlayerTowardsCenter();
-
-        List<Point> docks = getDockingPoints(target);
-
-        if (docks.isEmpty())
-            return movePlayerTowardsCenter();
 
         for (Point dock : docks)
             System.err.println("Found docking point: " + dock.x + " " + dock.y);
@@ -253,6 +281,15 @@ class Player {
           if (qi.p.x > 0 && tile.charAt(3) == '1' && tiles[qi.p.x - 1][qi.p.y].charAt(1) == '1')
             queue.add(new QueueInfo("LEFT", new Point(qi.p.x - 1, qi.p.y), qi.depth + 1));
         }
+      }
+
+      Point findClosestReachable(List<Point> points) {
+        Point minPoint = null;
+        for (Point reachable : reachablePoints.keySet())
+          for (Point point : points)
+            if (minPoint == null || taxiDistance(point, reachable) < taxiDistance(point, minPoint))
+              minPoint = reachable;
+        return minPoint;
       }
 
       String getPath(Point p) {
