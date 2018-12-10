@@ -10,17 +10,21 @@ import static java.lang.Math.*;
 class Player {
     public static String[][] tiles = new String[7][7];
     public static Map<String, Point> myItems = new HashMap<>();
-    public static List<String> activeQuests = new ArrayList<>();
-    public static List<Point> activeItems = new ArrayList<>();
+    public static Map<String, Point> activeItems = new HashMap<>();
+    public static Map<String, Point> enemyItems = new HashMap<>();
     public static Point p1 = new Point(0,0);
     public static Point p2 = new Point(0,0);
+    public static String myPreviousTile;
+    public static String myTile;
     public static Tree map;
+
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
         int [][] items = new int[2][2];
         int [][] players = new int[2][2];
         String pushMove = "";
         String move = "";
+        int deadlock = 0;
 
         // game loop
         while (true) {
@@ -38,7 +42,12 @@ class Player {
                 Point pl = i == 0 ? p1 : p2;
                 pl.x = playerX;
                 pl.y = playerY;
-                String playerTile = in.next();
+                myPreviousTile = myTile;
+                myTile = in.next();
+                if (turnType == 0 && myTile.equals(myPreviousTile))
+                  deadlock++;
+                else
+                  deadlock = 0;
             }
             int numItems = in.nextInt(); // the total number of items available on board and on player tiles
             for (int i = 0; i < numItems; i++) {
@@ -49,21 +58,20 @@ class Player {
 
                 if (itemPlId == 0)
                     myItems.put(itemName, new Point(itemX, itemY));
+                else
+                    enemyItems.put(itemName, new Point(itemX, itemY));
             }
             int numQuests = in.nextInt(); // the total number of revealed quests for both players
             for (int i = 0; i < numQuests; i++) {
                 String questItemName = in.next();
                 int questPlayerId = in.nextInt();
                 if (questPlayerId == 0)
-                    activeQuests.add(questItemName);
+                    activeItems.put(questItemName, myItems.get(questItemName));
             }
 
-            activeItems = activeQuests.stream().map(quest -> myItems.get(quest)).collect(Collectors.toList());
             map = new Tree(p1, 20);
-
-            //System.err.println("Paths to active items: ");
-            //activeItems.forEach(i -> System.err.println(map.getPath(i)));
-            int[] targetItem = new int[] {activeItems.get(0).x, activeItems.get(0).y};
+            Optional<Point> targetItemPoint = activeItems.values().stream().findFirst();
+            int[] targetItem = new int[] {targetItemPoint.get().x, targetItemPoint.get().y};
             System.err.println("Target item: " + targetItem[0] + " " + targetItem[1]);
             if(turnType == 0)
                 pushMove = getToTheDockingPoint(tiles, players, targetItem);
@@ -72,8 +80,8 @@ class Player {
 
             System.out.println(turnType == 0 ? pushMove : ("".equals(move) ? "PASS" : ("MOVE " + move.trim())));
 
+            enemyItems.clear();
             myItems.clear();
-            activeQuests.clear();
             activeItems.clear();
         }
     }
@@ -84,22 +92,25 @@ class Player {
       int depth = 20;
       while (true) {
         Tree map = new Tree(start, depth);
-        String tmpmove = null;
+        String itemMove = null;
+        String itemName = null;
         Point point = null;
-        for (Point item : activeItems) {
-          String path = map.getPath(item);
+        for (Map.Entry<String, Point> item : activeItems.entrySet()) {
+          String path = map.getPath(item.getValue());
           if (path == null)
             continue;
-          if (tmpmove == null || path.split(" ").length < tmpmove.split(" ").length) {
-            tmpmove = path;
-            point = item;
+          if (itemMove == null || path.split(" ").length < itemMove.split(" ").length) {
+            itemMove = path;
+            itemName = item.getKey();
+            point = item.getValue();
           }
         }
-        System.err.println("Move: " + tmpmove);
-        if (tmpmove == null)
+        System.err.println("Move: " + itemMove);
+        if (itemMove == null)
           return move;
-        activeItems.remove(point);
-        move += tmpmove;
+        activeItems.remove(itemName);
+        myItems.remove(itemName);
+        move += itemMove;
         depth -= map.reachablePoints.get(point).distanceFromRoot;
         start = point;
       }
