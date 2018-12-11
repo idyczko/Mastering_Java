@@ -255,6 +255,8 @@ public class Player {
     private static Point getPoint(Point p, String directive) {
       int y = UP_DIR.equals(directive) ? -1 : DOWN_DIR.equals(directive) ? 1 : 0;
       int x = RIGHT_DIR.equals(directive) ? 1 : LEFT_DIR.equals(directive) ? -1 : 0;
+      if (p.x + x < 0 || p.y + y < 0)
+        return null;
       return new Point(p.x + x, p.y + y);
     }
 
@@ -266,23 +268,29 @@ public class Player {
 
     private static Pair findLeastDistantPair(Collection<Point> sources, Collection<Point> sinks) {
       Pair pair = null;
+      int distance = 0;
       for (Point source : sources)
         for (Point sink : sinks)
-          if (pair == null || taxiDistance(source, sink) < taxiDistance(pair.source, pair.sink)) {
+          if (pair == null || taxiDistance(source, sink) < distance) {
             pair = new Pair(source, sink);
+            distance = taxiDistance(source, sink);
           }
       return pair;
     }
 
     private static boolean areTilesCompatible(Point p1, Point p2){
-      if (taxiDistance(p1, p2) != 1)
+      return wouldTilesBeCompatible(p1, p2, getTile(p2));
+    }
+
+    private static boolean wouldTilesBeCompatible(Point sink, Point dock, String tile) {
+      if (taxiDistance(sink, dock) != 1)
         return false;
-      boolean verticallyAligned = abs(p1.x - p2.x) != 0;
-      boolean p1IsFirst = verticallyAligned ? p1.x < p2.x : p1.y < p2.y;
-      return verticallyAligned ? (p1IsFirst ? (getTile(p1).charAt(RIGHT) == '1' && getTile(p2).charAt(LEFT) == '1') :
-                                              (getTile(p1).charAt(LEFT) == '1' && getTile(p2).charAt(RIGHT) == '1')) :
-                                (p1IsFirst ? (getTile(p1).charAt(DOWN) == '1' && getTile(p2).charAt(UP) == '1') :
-                                              (getTile(p1).charAt(UP) == '1' && getTile(p2).charAt(DOWN) == '1'));
+      boolean verticallyAligned = abs(sink.x - dock.x) != 0;
+      boolean p1IsFirst = verticallyAligned ? sink.x < dock.x : sink.y < dock.y;
+      return verticallyAligned ? (p1IsFirst ? (getTile(sink).charAt(RIGHT) == '1' && tile.charAt(LEFT) == '1') :
+                                              (getTile(sink).charAt(LEFT) == '1' && tile.charAt(RIGHT) == '1')) :
+                                (p1IsFirst ? (getTile(sink).charAt(DOWN) == '1' && tile.charAt(UP) == '1') :
+                                              (getTile(sink).charAt(UP) == '1' && tile.charAt(DOWN) == '1'));
     }
 
     private static void log(String s) {
@@ -333,6 +341,14 @@ public class Player {
         Node node = reachablePoints.get(p);
         return "".equals(node.parentMove) ? path : getPath(getParentPoint(p, node.parentMove), node.parentMove + " " + path);
       }
+
+      Set<Point> resolveDocks(Point point) {
+        Set<Point> docks = new HashSet<>();
+        for (Point reachable  : reachablePoints.keySet()) {
+          reachable.getNeighbours().stream().filter(p -> !reachablePoints.containsKey(p)).filter(p -> wouldTilesBeCompatible(reachable, p, getTile(point))).forEach(p -> docks.add(p));
+        }
+        return docks;
+      }
     }
 
     public static class QueueInfo {
@@ -365,6 +381,24 @@ public class Player {
       Point(int x, int y) {
         this.x = x;
         this.y = y;
+      }
+
+      List<Point> getNeighbours() {
+        List<Point> neighbours = new ArrayList<>();
+        Point point = null;
+        if ((point = getPoint(this, UP_DIR)) != null)
+          neighbours.add(point);
+
+        if ((point = getPoint(this, RIGHT_DIR)) != null)
+          neighbours.add(point);
+
+        if ((point = getPoint(this, DOWN_DIR)) != null)
+          neighbours.add(point);
+
+        if ((point = getPoint(this, LEFT_DIR)) != null)
+          neighbours.add(point);
+
+        return neighbours;
       }
 
       @Override
