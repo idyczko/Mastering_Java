@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 /**
  * Help the Christmas elves fetch presents in a magical labyrinth!
  **/
-public class Player {
+class Player {
     public static final int UP = 0;
     public static final int RIGHT = 1;
     public static final int DOWN = 2;
@@ -24,7 +24,6 @@ public class Player {
     public static Point p2 = new Point(0,0);
     public static String myPreviousTile;
     public static String myTile;
-    public static Tree map;
     public static boolean escapeTile = false;
 
     public static void main(String args[]) {
@@ -78,7 +77,6 @@ public class Player {
                     activeItems.put(questItemName, myItems.get(questItemName));
             }
 
-            map = new Tree(p1, 20);
             if(turnType == 0)
                 pushMove = getToTheDockingPoint();
             else
@@ -220,10 +218,6 @@ public class Player {
 
     private static int taxiDistance(Point p1, Point p2) {
       return abs(p1.x - p2.x) + abs(p1.y - p2.y);
-    }
-
-    private static int distance(int x1, int y1, int x2, int y2) {
-      return abs(x1 - x2) + abs(y1 - y2);
     }
 
     private static List<Point> getDockingPoints(Point target) {
