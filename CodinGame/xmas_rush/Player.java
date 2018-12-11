@@ -8,6 +8,14 @@ import static java.lang.Math.*;
  * Help the Christmas elves fetch presents in a magical labyrinth!
  **/
 public class Player {
+    public static final int UP = 0;
+    public static final int RIGHT = 1;
+    public static final int DOWN = 2;
+    public static final int LEFT = 3;
+    public static final String UP_DIR = "UP";
+    public static final String RIGHT_DIR = "RIGHT";
+    public static final String DOWN_DIR = "DOWN";
+    public static final String LEFT_DIR = "LEFT";
     public static String[][] tiles = new String[7][7];
     public static Map<String, Point> myItems = new HashMap<>();
     public static Map<String, Point> activeItems = new HashMap<>();
@@ -223,21 +231,21 @@ public class Player {
         String playerTile = getTile(p1);
         String itemTile = getTile(target);
         if (p1.y > 0 && playerTile.charAt(0) == '1' && itemTile.charAt(2) == '1')
-          docks.add(getPoint(p1, "UP"));
+          docks.add(getPoint(p1, UP_DIR));
         if (p1.y < 6 && playerTile.charAt(2) == '1' && itemTile.charAt(0) == '1')
-          docks.add(getPoint(p1, "DOWN"));
+          docks.add(getPoint(p1, DOWN_DIR));
         if (p1.x > 0 && playerTile.charAt(3) == '1' && itemTile.charAt(1) == '1')
-          docks.add(getPoint(p1, "LEFT"));
+          docks.add(getPoint(p1, LEFT_DIR));
         if (p1.x < 6 && playerTile.charAt(1) == '1' && itemTile.charAt(3) == '1')
-          docks.add(getPoint(p1, "RIGHT"));
+          docks.add(getPoint(p1, RIGHT_DIR));
         return docks;
     }
 
     public static boolean parentReachable(String parentMove, String tile) {
-      return parentMove.equals("DOWN") && tile.charAt(0) == '0'||
-          parentMove.equals("LEFT") && tile.charAt(1) == '0' ||
-          parentMove.equals("UP") && tile.charAt(2) == '0' ||
-          parentMove.equals("RIGHT") && tile.charAt(3) == '0';
+      return parentMove.equals(DOWN_DIR) && tile.charAt(0) == '0'||
+          parentMove.equals(LEFT_DIR) && tile.charAt(1) == '0' ||
+          parentMove.equals(UP_DIR) && tile.charAt(2) == '0' ||
+          parentMove.equals(RIGHT_DIR) && tile.charAt(3) == '0';
     }
 
     private static String getTile(Point p) {
@@ -245,15 +253,36 @@ public class Player {
     }
 
     private static Point getPoint(Point p, String directive) {
-      int y = "UP".equals(directive) ? -1 : "DOWN".equals(directive) ? 1 : 0;
-      int x = "RIGHT".equals(directive) ? 1 : "LEFT".equals(directive) ? -1 : 0;
+      int y = UP_DIR.equals(directive) ? -1 : DOWN_DIR.equals(directive) ? 1 : 0;
+      int x = RIGHT_DIR.equals(directive) ? 1 : LEFT_DIR.equals(directive) ? -1 : 0;
       return new Point(p.x + x, p.y + y);
     }
 
     private static Point getParentPoint(Point p, String parentDirective) {
-      int y = "UP".equals(parentDirective) ? 1 : "DOWN".equals(parentDirective) ? -1 : 0;
-      int x = "RIGHT".equals(parentDirective) ? -1 : "LEFT".equals(parentDirective) ? 1 : 0;
+      int y = UP_DIR.equals(parentDirective) ? 1 : DOWN_DIR.equals(parentDirective) ? -1 : 0;
+      int x = RIGHT_DIR.equals(parentDirective) ? -1 : LEFT_DIR.equals(parentDirective) ? 1 : 0;
       return new Point(p.x + x, p.y + y);
+    }
+
+    private static Pair findLeastDistantPair(Collection<Point> sources, Collection<Point> sinks) {
+      Pair pair = null;
+      for (Point source : sources)
+        for (Point sink : sinks)
+          if (pair == null || taxiDistance(source, sink) < taxiDistance(pair.source, pair.sink)) {
+            pair = new Pair(source, sink);
+          }
+      return pair;
+    }
+
+    private static boolean areTilesCompatible(Point p1, Point p2){
+      if (taxiDistance(p1, p2) != 1)
+        return false;
+      boolean verticallyAligned = abs(p1.x - p2.x) != 0;
+      boolean p1IsFirst = verticallyAligned ? p1.x < p2.x : p1.y < p2.y;
+      return verticallyAligned ? (p1IsFirst ? (getTile(p1).charAt(RIGHT) == '1' && getTile(p2).charAt(LEFT) == '1') :
+                                              (getTile(p1).charAt(LEFT) == '1' && getTile(p2).charAt(RIGHT) == '1')) :
+                                (p1IsFirst ? (getTile(p1).charAt(DOWN) == '1' && getTile(p2).charAt(UP) == '1') :
+                                              (getTile(p1).charAt(UP) == '1' && getTile(p2).charAt(DOWN) == '1'));
     }
 
     private static void log(String s) {
@@ -268,6 +297,7 @@ public class Player {
         queue.add(new QueueInfo("", start, 0));
         while (!queue.isEmpty()) {
           QueueInfo qi = queue.poll();
+
           if (qi.depth > depth)
             return;
 
@@ -275,25 +305,24 @@ public class Player {
             continue;
 
           reachablePoints.put(qi.p, new Node(qi.parentMove, qi.depth));
-          String tile = getTile(qi.p);
-          if (qi.p.y > 0 && tile.charAt(0) == '1' && tiles[qi.p.x][qi.p.y - 1].charAt(2) == '1')
-            queue.add(new QueueInfo("UP", new Point(qi.p.x, qi.p.y -1), qi.depth + 1));
-          if (qi.p.x < 6 && tile.charAt(1) == '1' && tiles[qi.p.x + 1][qi.p.y].charAt(3) == '1')
-            queue.add(new QueueInfo("RIGHT", new Point(qi.p.x + 1, qi.p.y), qi.depth + 1));
-          if (qi.p.y < 6 && tile.charAt(2) == '1' && tiles[qi.p.x][qi.p.y + 1].charAt(0) == '1')
-            queue.add(new QueueInfo("DOWN", new Point(qi.p.x, qi.p.y + 1), qi.depth + 1));
-          if (qi.p.x > 0 && tile.charAt(3) == '1' && tiles[qi.p.x - 1][qi.p.y].charAt(1) == '1')
-            queue.add(new QueueInfo("LEFT", new Point(qi.p.x - 1, qi.p.y), qi.depth + 1));
+
+          if (qi.p.y > 0 && areTilesCompatible(qi.p, getPoint(qi.p, UP_DIR)))
+            queue.add(new QueueInfo(UP_DIR, getPoint(qi.p, UP_DIR), qi.depth + 1));
+
+          if (qi.p.x < 6 && areTilesCompatible(qi.p, getPoint(qi.p, RIGHT_DIR)))
+            queue.add(new QueueInfo(RIGHT_DIR, getPoint(qi.p, RIGHT_DIR), qi.depth + 1));
+
+          if (qi.p.y < 6 && areTilesCompatible(qi.p, getPoint(qi.p, DOWN_DIR)))
+            queue.add(new QueueInfo(DOWN_DIR, getPoint(qi.p, DOWN_DIR), qi.depth + 1));
+
+          if (qi.p.x > 0 && areTilesCompatible(qi.p, getPoint(qi.p, LEFT_DIR)))
+            queue.add(new QueueInfo(LEFT_DIR, getPoint(qi.p, LEFT_DIR), qi.depth + 1));
         }
       }
 
       Point findClosestReachable(List<Point> points) {
-        Point minPoint = null;
-        for (Point reachable : reachablePoints.keySet())
-          for (Point point : points)
-            if (minPoint == null || taxiDistance(point, reachable) < taxiDistance(point, minPoint))
-              minPoint = reachable;
-        return minPoint;
+        Pair pair = findLeastDistantPair(reachablePoints.keySet(), points);
+        return pair != null ? pair.source : null;
       }
 
       String getPath(Point p) {
@@ -304,21 +333,6 @@ public class Player {
         Node node = reachablePoints.get(p);
         return "".equals(node.parentMove) ? path : getPath(getParentPoint(p, node.parentMove), node.parentMove + " " + path);
       }
-    }
-
-    private static boolean areTilesCompatible(Point p1, Point p2){
-      if (taxiDistance(p1, p2) != 1)
-        return false;
-      boolean verticallyAligned = abs(p1.x - p2.x) != 0;
-      boolean p1IsFirst = verticallyAligned ? p1.x < p2.x : p1.y < p2.y;
-      return verticallyAligned ? (p1IsFirst ? (getTile(p1).charAt(Direction.RIGHT.ordinal()) == '1' && getTile(p2).charAt(Direction.LEFT.ordinal()) == '1') :
-                                              (getTile(p1).charAt(Direction.LEFT.ordinal()) == '1' && getTile(p2).charAt(Direction.RIGHT.ordinal()) == '1')) :
-                                (p1IsFirst ? (getTile(p1).charAt(Direction.DOWN.ordinal()) == '1' && getTile(p2).charAt(Direction.UP.ordinal()) == '1') :
-                                              (getTile(p1).charAt(Direction.UP.ordinal()) == '1' && getTile(p2).charAt(Direction.DOWN.ordinal()) == '1'));
-    }
-
-    public enum Direction {
-      UP, RIGHT, DOWN, LEFT;
     }
 
     public static class QueueInfo {
@@ -364,5 +378,15 @@ public class Player {
         return this.x * 13 + this.y * 19;
       }
 
+    }
+
+    public static class Pair {
+      Point source;
+      Point sink;
+
+      Pair(Point source, Point sink) {
+        this.source = source;
+        this.sink = sink;
+      }
     }
 }
