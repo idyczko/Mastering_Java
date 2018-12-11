@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 /**
  * Help the Christmas elves fetch presents in a magical labyrinth!
  **/
-class Player {
+public class Player {
     public static String[][] tiles = new String[7][7];
     public static Map<String, Point> myItems = new HashMap<>();
     public static Map<String, Point> activeItems = new HashMap<>();
@@ -95,7 +95,7 @@ class Player {
         String itemName = null;
         Point point = null;
         for (Map.Entry<String, Point> item : activeItems.entrySet()) {
-          System.err.println("Active item: " + item.getValue().x + " " + item.getValue().y);
+          log("Active item: " + item.getValue().x + " " + item.getValue().y);
           String path = map.getPath(item.getValue());
           if (path == null)
             continue;
@@ -105,10 +105,10 @@ class Player {
             point = item.getValue();
           }
         }
-        System.err.println("Move: " + itemMove);
+        log("Move: " + itemMove);
         if (itemMove == null) {
           if ("".equals(move) && escapeTile) {
-            System.err.println("Escaping tile!");
+            log("Escaping tile!");
             Point p = map.findClosestReachable(new ArrayList<>(activeItems.values()));
             if (p.equals(p1)) {
               Optional<Point> opt = map.reachablePoints.keySet().stream().filter(po -> !po.equals(p1)).findFirst();
@@ -146,27 +146,27 @@ class Player {
           }
 
         if (docks == null || docks.isEmpty()) {
-          if (p1.x == 0 || p1.x == 6 || p1.y == 0 || p1.y == 6)
+          if (!(p1.x == 0 || p1.x == 6 || p1.y == 0 || p1.y == 6))
             escapeTile = true;
-          return movePlayerTowardsCenter();
+          return moveTowardsCenter(p1);
         }
 
-        System.err.println("Target point: " + target.x + " " + target.y);
+        log("Target point: " + target.x + " " + target.y);
 
         for (Point dock : docks)
-            System.err.println("Found docking point: " + dock.x + " " + dock.y);
+            log("Found docking point: " + dock.x + " " + dock.y);
 
         Point closestDock = findClosestPoint(target, docks);
-        System.err.println("Closest docking point: " + closestDock.x + " " + closestDock.y);
+        log("Closest docking point: " + closestDock.x + " " + closestDock.y);
         return calculateDockMove(closestDock, target);
     }
 
-    private static String movePlayerTowardsCenter() {
-        int xDiff = p1.x - 3;
-        int yDiff = p1.y - 3;
+    private static String moveTowardsCenter(Point p) {
+        int xDiff = p.x - 3;
+        int yDiff = p.y - 3;
         boolean goHorizontal = abs(xDiff) > abs(yDiff);
-        return "PUSH " + (goHorizontal ? (p1.y + (xDiff > 0 ? " LEFT" : " RIGHT")) :
-            (p1.x + (yDiff > 0 ? " UP" : " DOWN")));
+        return "PUSH " + (goHorizontal ? (p.y + (xDiff > 0 ? " LEFT" : " RIGHT")) :
+            (p.x + (yDiff > 0 ? " UP" : " DOWN")));
     }
 
     private static String calculateDockMove(Point dock, Point item) {
@@ -256,6 +256,10 @@ class Player {
       return new Point(p.x + x, p.y + y);
     }
 
+    private static void log(String s) {
+      System.err.println(s);
+    }
+
     public static class Tree {
       Map<Point, Node> reachablePoints = new HashMap<>();
 
@@ -295,10 +299,26 @@ class Player {
       String getPath(Point p) {
         return reachablePoints.containsKey(p) ? getPath(p, "") : null;
       }
+
       String getPath(Point p, String path) {
         Node node = reachablePoints.get(p);
         return "".equals(node.parentMove) ? path : getPath(getParentPoint(p, node.parentMove), node.parentMove + " " + path);
       }
+    }
+
+    private static boolean areTilesCompatible(Point p1, Point p2){
+      if (taxiDistance(p1, p2) != 1)
+        return false;
+      boolean verticallyAligned = abs(p1.x - p2.x) != 0;
+      boolean p1IsFirst = verticallyAligned ? p1.x < p2.x : p1.y < p2.y;
+      return verticallyAligned ? (p1IsFirst ? (getTile(p1).charAt(Direction.RIGHT.ordinal()) == '1' && getTile(p2).charAt(Direction.LEFT.ordinal()) == '1') :
+                                              (getTile(p1).charAt(Direction.LEFT.ordinal()) == '1' && getTile(p2).charAt(Direction.RIGHT.ordinal()) == '1')) :
+                                (p1IsFirst ? (getTile(p1).charAt(Direction.DOWN.ordinal()) == '1' && getTile(p2).charAt(Direction.UP.ordinal()) == '1') :
+                                              (getTile(p1).charAt(Direction.UP.ordinal()) == '1' && getTile(p2).charAt(Direction.DOWN.ordinal()) == '1'));
+    }
+
+    public enum Direction {
+      UP, RIGHT, DOWN, LEFT;
     }
 
     public static class QueueInfo {
@@ -331,11 +351,6 @@ class Player {
       Point(int x, int y) {
         this.x = x;
         this.y = y;
-      }
-
-      Point(int[] point) {
-        this.x = point[0];
-        this.y = point[1];
       }
 
       @Override
