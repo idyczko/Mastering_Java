@@ -1,3 +1,4 @@
 1. If blocked with opponent - change strategy if losing/draw.
 2. Extend docking points. Perhaps look simultaneously from player and item?
 3. Maybe move player's tile instead of item tile when optimal.
+4. Move not only when item reachable - try to evalueate all reachable tiles by distance to closest active items/count of docks.
