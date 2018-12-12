@@ -131,6 +131,26 @@ class Player {
       return pair != null ? map.getPath(pair.source) : "";
     }
 
+    private static Point findOptimalPlace(Collection<Point> places, Collection<Point> items) {
+      Map<Integer, Point> rankToPlace = new HashMap<>();
+      for (Point place : places)
+        for (Point item : items)
+          if (item.x > 0)
+            rankToPlace.put(rateThePlace(place, item), place);
+
+      return null;
+    }
+
+    private static int rateThePlace(Point target, Point item) {
+        List<Point> docks = getDockingPoints(target, item);
+        OptionalInt leastDistance = docks.stream().mapToInt(d -> numberOfPushes(item, d)).min();
+        return (leastDistance.isPresent() ? leastDistance.getAsInt() : 2000) + (4 - docks.size());
+    }
+
+    private static int numberOfPushes(Point target, Point item) {
+        return taxiDistance(target, item) + ((target.x == item.x || target.y == item.x) ? 2 : 0);
+    }
+
     private static String escapeTile(Tree map, Point start) {
       log("Escaping tile!");
       Point p = map.findClosestReachable(new ArrayList<>(activeItems.values()));
@@ -152,7 +172,7 @@ class Player {
         List<Pair> pairs = new ArrayList<>();
         for (Point item : activeItems.values())
           if (item.x > 0)
-            for (Point dock : getDockingPoints(item))
+            for (Point dock : getDockingPoints(p1, item))
               pairs.add(new Pair(dock, item));
 
         if (pairs.isEmpty()) {
@@ -223,18 +243,18 @@ class Player {
       return abs(p1.x - p2.x) + abs(p1.y - p2.y);
     }
 
-    private static List<Point> getDockingPoints(Point target) {
+    private static List<Point> getDockingPoints(Point dock, Point target) {
         List<Point> docks = new ArrayList<>();
-        String playerTile = getTile(p1);
+        String dockTile = getTile(dock);
         String itemTile = getTile(target);
-        if (p1.y > 0 && playerTile.charAt(0) == '1' && itemTile.charAt(2) == '1')
-          docks.add(getPoint(p1, UP_DIR));
-        if (p1.y < 6 && playerTile.charAt(2) == '1' && itemTile.charAt(0) == '1')
-          docks.add(getPoint(p1, DOWN_DIR));
-        if (p1.x > 0 && playerTile.charAt(3) == '1' && itemTile.charAt(1) == '1')
-          docks.add(getPoint(p1, LEFT_DIR));
-        if (p1.x < 6 && playerTile.charAt(1) == '1' && itemTile.charAt(3) == '1')
-          docks.add(getPoint(p1, RIGHT_DIR));
+        if (dock.y > 0 && dockTile.charAt(0) == '1' && itemTile.charAt(2) == '1')
+          docks.add(getPoint(dock, UP_DIR));
+        if (dock.y < 6 && dockTile.charAt(2) == '1' && itemTile.charAt(0) == '1')
+          docks.add(getPoint(dock, DOWN_DIR));
+        if (dock.x > 0 && dockTile.charAt(3) == '1' && itemTile.charAt(1) == '1')
+          docks.add(getPoint(dock, LEFT_DIR));
+        if (dock.x < 6 && dockTile.charAt(1) == '1' && itemTile.charAt(3) == '1')
+          docks.add(getPoint(dock, RIGHT_DIR));
         return docks;
     }
 
@@ -288,6 +308,13 @@ class Player {
                                               (getTile(sink).charAt(LEFT) == '1' && tile.charAt(RIGHT) == '1')) :
                                 (p1IsFirst ? (getTile(sink).charAt(DOWN) == '1' && tile.charAt(UP) == '1') :
                                               (getTile(sink).charAt(UP) == '1' && tile.charAt(DOWN) == '1'));
+    }
+
+    private static int compatibilityRank(Point p1, Point p2) {
+      return ((getTile(p1).charAt(RIGHT) == '1' && getTile(p2).charAt(LEFT) == '1') ? 1 : 0) +
+              ((getTile(p1).charAt(LEFT) == '1' && getTile(p2).charAt(RIGHT) == '1') ? 1 : 0) +
+              ((getTile(p1).charAt(DOWN) == '1' && getTile(p2).charAt(UP) == '1') ? 1 : 0) +
+              ((getTile(p1).charAt(UP) == '1' && getTile(p2).charAt(DOWN) == '1') ? 1 : 0);
     }
 
     private static void log(String s) {
