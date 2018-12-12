@@ -10,6 +10,8 @@ public class Main {
 
 		System.out.println("Bits:\nn: " + bitLength(n) + ": " + bits(n) + "\nm: " + bitLength(m) + ": " + bits(m));
 		System.out.println(bits(insert(n, m, j)));
+		System.out.println("Ones: " + ones(m) + " " + ones(n));
+		System.out.println("Distance: " + distance(n, m));
 	}
 
 	private static int insert(int n, int m, int j) {
@@ -44,5 +46,19 @@ public class Main {
 		while ((n /= 2) != 0)
 			sb.append(String.valueOf(n & 1));
 		return sb.reverse().toString();
+	}
+
+	private static int distance(int i, int j) {
+		return ones(i ^ j);
+	}
+
+	private static int ones(int n) {
+		int ones = 0;
+		while (n > 0) {
+			if ((n & 1) == 1)
+				ones++;
+			n /= 2;
+		}
+		return ones;
 	}
 }
