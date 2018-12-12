@@ -126,7 +126,8 @@ class Player {
     }
 
     private static String tryToUseRemainingMoves(Tree map) {
-      Pair pair = findLeastDistantPair(map.reachablePoints.keySet(), activeItems.values());
+      Pair pair = findLeastDistantPair(map.reachablePoints.keySet(),
+          activeItems.values().stream().filter(p -> p.x > 0).collect(Collectors.toList()));
       return pair != null ? map.getPath(pair.source) : "";
     }
 
@@ -148,28 +149,25 @@ class Player {
     }
 
     private static String calculatePushMove() {
-        Point target = null;
-        List<Point> docks = null;
+        List<Pair> pairs = new ArrayList<>();
         for (Point item : activeItems.values())
-          if (item.x >= 0 && !(docks = getDockingPoints(item)).isEmpty()) {
-            target = item;
-            break;
-          }
+          if (item.x > 0)
+            for (Point dock : getDockingPoints(item))
+              pairs.add(new Pair(dock, item));
 
-        if (docks == null || docks.isEmpty()) {
-          if (!(p1.x == 0 || p1.x == 6 || p1.y == 0 || p1.y == 6))
-            escapeTile = true;
+        if (pairs.isEmpty()) {
           return moveTowardsCenter(p1);
         }
 
-        log("Target tile: " + target.x + " " + target.y);
+        Pair optimal = pairs.get(0);
+        for (Pair pair : pairs)
+          if (taxiDistance(pair.source, pair.sink) < taxiDistance(optimal.source, optimal.sink))
+            optimal = pair;
 
-        for (Point dock : docks)
-            log("Found docking point: " + dock.x + " " + dock.y);
+        log("Target tile: " + optimal.sink.x + " " + optimal.sink.y);
+        log("Chosen dock: " + optimal.source.x + " " + optimal.source.y);
 
-        Point closestDock = findClosestPoint(target, docks);
-        log("Best docking point: " + closestDock.x + " " + closestDock.y);
-        return calculateDockMove(p1, closestDock, target);
+        return calculateDockMove(p1, optimal.source, optimal.sink);
     }
 
     private static String moveTowardsCenter(Point p) {
