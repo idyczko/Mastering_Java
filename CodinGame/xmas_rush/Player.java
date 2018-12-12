@@ -78,7 +78,7 @@ class Player {
             }
 
             if(turnType == 0)
-                pushMove = getToTheDockingPoint();
+                pushMove = calculatePushMove();
             else
                 move = calculateMove();
 
@@ -111,38 +111,43 @@ class Player {
             point = item.getValue();
           }
         }
+
         log("Move: " + itemMove);
         if (itemMove == null) {
-          if ("".equals(move) && escapeTile) {
-            log("Escaping tile!");
-            Point p = map.findClosestReachable(new ArrayList<>(activeItems.values()));
-            if (p.equals(p1)) {
-              Optional<Point> opt = map.reachablePoints.keySet().stream().filter(po -> !po.equals(p1)).findFirst();
-              if (opt.isPresent())
-                p = opt.get();
-            }
-            if (p == null || p.equals(p1))
-              return null;
-
-            move = map.getPath(p);
-            if (move != null)
-              escapeTile = false;
-            return move;
-          } else {
-            escapeTile = false;
-            return move;
-          }
+          return move + tryToUseRemainingMoves(map);
         }
+
         activeItems.remove(itemName);
         myItems.remove(itemName);
         move += itemMove;
         depth -= map.reachablePoints.get(point).distanceFromRoot;
         start = point;
       }
-
     }
 
-    private static String getToTheDockingPoint() {
+    private static String tryToUseRemainingMoves(Tree map) {
+      Pair pair = findLeastDistantPair(map.reachablePoints.keySet(), activeItems.values());
+      return pair != null ? map.getPath(pair.source) : "";
+    }
+
+    private static String escapeTile(Tree map, Point start) {
+      log("Escaping tile!");
+      Point p = map.findClosestReachable(new ArrayList<>(activeItems.values()));
+      if (p.equals(start)) {
+        Optional<Point> opt = map.reachablePoints.keySet().stream().filter(po -> !po.equals(start)).findFirst();
+        if (opt.isPresent())
+          p = opt.get();
+      }
+      if (p == null || p.equals(start))
+        return null;
+
+      String move = map.getPath(p);
+      if (move != null)
+        escapeTile = false;
+      return move;
+    }
+
+    private static String calculatePushMove() {
         Point target = null;
         List<Point> docks = null;
         for (Point item : activeItems.values())
@@ -157,14 +162,14 @@ class Player {
           return moveTowardsCenter(p1);
         }
 
-        log("Target point: " + target.x + " " + target.y);
+        log("Target tile: " + target.x + " " + target.y);
 
         for (Point dock : docks)
             log("Found docking point: " + dock.x + " " + dock.y);
 
         Point closestDock = findClosestPoint(target, docks);
-        log("Closest docking point: " + closestDock.x + " " + closestDock.y);
-        return calculateDockMove(closestDock, target);
+        log("Best docking point: " + closestDock.x + " " + closestDock.y);
+        return calculateDockMove(p1, closestDock, target);
     }
 
     private static String moveTowardsCenter(Point p) {
@@ -175,20 +180,20 @@ class Player {
             (p.x + (yDiff > 0 ? " UP" : " DOWN")));
     }
 
-    private static String calculateDockMove(Point dock, Point item) {
+    private static String calculateDockMove(Point player, Point dock, Point item) {
       if (taxiDistance(item, dock) == 0)
         return "PUSH " + ((dock.x + 3) % 7) + " DOWN";
 
-      if (item.x == p1.x)
+      if (item.x == player.x)
         return escapeColumn(dock, item);
 
-      if (item.y == p1.y)
+      if (item.y == player.y)
         return escapeRow(dock, item);
 
       int xDiff = dock.x - item.x;
       int yDiff = dock.y - item.y;
       boolean goHorizontal = abs(xDiff) != abs(yDiff) ? abs(xDiff) > abs(yDiff) :
-            (abs(item.y - p1.y) == 1);
+            (abs(item.y - player.y) == 1);
 
       return "PUSH " + (goHorizontal ? (item.y + (xDiff > 0 ? " RIGHT" : " LEFT")) :
         (item.x + (yDiff > 0 ? " DOWN" : " UP")));
@@ -292,6 +297,7 @@ class Player {
     }
 
     public static class Tree {
+      int depth;
       Map<Point, Node> reachablePoints = new HashMap<>();
 
       Tree(Point start, int depth) {
@@ -306,6 +312,7 @@ class Player {
           if (reachablePoints.containsKey(qi.p))
             continue;
 
+          this.depth = this.depth < qi.depth ? qi.depth : this.depth;
           reachablePoints.put(qi.p, new Node(qi.parentMove, qi.depth));
 
           if (qi.p.y > 0 && areTilesCompatible(qi.p, getPoint(qi.p, UP_DIR)))
