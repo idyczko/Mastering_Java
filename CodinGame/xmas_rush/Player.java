@@ -25,6 +25,8 @@ class Player {
     public static String myPreviousTile;
     public static String myTile;
     public static boolean escapeTile = false;
+    public static int deadlock = 0;
+    public static String lastPush = "";
 
     public static void main(String args[]) {
         Scanner in = new Scanner(System.in);
@@ -32,7 +34,6 @@ class Player {
         int [][] players = new int[2][2];
         String pushMove = "";
         String move = "";
-        int deadlock = 0;
 
         // game loop
         while (true) {
@@ -50,12 +51,14 @@ class Player {
                 Point pl = i == 0 ? p1 : p2;
                 pl.x = playerX;
                 pl.y = playerY;
-                myPreviousTile = myTile;
-                myTile = in.next();
-                if (turnType == 0 && myTile.equals(myPreviousTile))
-                  deadlock++;
-                else
-                  deadlock = 0;
+                String tile = in.next();
+                if (i == 0) {
+                  myPreviousTile = myTile;
+                  myTile = tile;
+                  if (turnType == 0 && myTile.equals(myPreviousTile))
+                    deadlock++;
+                }
+
             }
             int numItems = in.nextInt(); // the total number of items available on board and on player tiles
             for (int i = 0; i < numItems; i++) {
@@ -78,11 +81,11 @@ class Player {
             }
 
             if(turnType == 0)
-                pushMove = calculatePushMove();
+                lastPush = calculatePushMove();
             else
                 move = calculateMove();
 
-            System.out.println(turnType == 0 ? pushMove : ("".equals(move) ? "PASS" : ("MOVE " + move.trim())));
+            System.out.println(turnType == 0 ? lastPush : ("".equals(move) ? "PASS" : ("MOVE " + move.trim())));
 
             enemyItems.clear();
             myItems.clear();
@@ -126,9 +129,8 @@ class Player {
     }
 
     private static String tryToUseRemainingMoves(Tree map) {
-      Pair pair = findLeastDistantPair(map.reachablePoints.keySet(),
-          activeItems.values().stream().filter(p -> p.x > 0).collect(Collectors.toList()));
-      return pair != null ? map.getPath(pair.source) : "";
+      Point optimal = findOptimalPlace(map.reachablePoints.keySet(), activeItems.values());
+      return optimal != null ? map.getPath(optimal) : "";
     }
 
     private static Point findOptimalPlace(Collection<Point> places, Collection<Point> items) {
@@ -138,7 +140,11 @@ class Player {
           if (item.x > 0)
             rankToPlace.put(rateThePlace(place, item), place);
 
-      return null;
+      OptionalInt minimal = rankToPlace.keySet().stream().mapToInt(i -> i).min();
+      if (!minimal.isPresent())
+        return null;
+
+      return rankToPlace.get(minimal.getAsInt());
     }
 
     private static int rateThePlace(Point target, Point item) {
@@ -181,12 +187,32 @@ class Player {
 
         Pair optimal = pairs.get(0);
         for (Pair pair : pairs)
-          if (taxiDistance(pair.source, pair.sink) < taxiDistance(optimal.source, optimal.sink))
+          if (taxiDistance(pair.source, pair.sink) < taxiDistance(optimal.source, optimal.sink)) {
             optimal = pair;
+          }
+        pairs.remove(optimal);
+
+
 
         log("Target tile: " + optimal.sink.x + " " + optimal.sink.y);
         log("Chosen dock: " + optimal.source.x + " " + optimal.source.y);
 
+        if (deadlock > 10 && enemyItems.size() < myItems.keySet().size()) {
+          log("Escaping deadlock!");
+          if (pairs.isEmpty()) {
+            deadlock = 0;
+            return moveTowardsCenter(p1);
+          }
+          Pair subOptimal = pairs.get(0);
+          for (Pair pair : pairs)
+            if (taxiDistance(pair.source, pair.sink) < taxiDistance(subOptimal.source, subOptimal.sink)) {
+              subOptimal = pair;
+            }
+          log("Backup: " + subOptimal.sink.x + " " + subOptimal.sink.y);
+          deadlock = 0;
+          String move = calculateDockMove(p1, subOptimal.source, subOptimal.sink);
+          return move.equals(lastPush) ? moveTowardsCenter(p1) : move;
+        }
         return calculateDockMove(p1, optimal.source, optimal.sink);
     }
 
