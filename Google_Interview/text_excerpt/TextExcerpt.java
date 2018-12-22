@@ -7,14 +7,16 @@ public class TextExcerpt {
 	public static void main(String[] args) {
 		String text = "I was not happy but I have seen the others are happy so I started to feel happy";
 		List terms = Arrays.asList("I", "happy");
+		System.out.println(text);
 		String excerpt = calculateExcerpt(terms, text.split(" "));
 		System.out.println(excerpt);
 	}
 
 	private static String calculateExcerpt(List<String> terms, String[] text) {
-		Map<String, LinkedList<Integer>> positions = findPositions(terms, text);
-		LinkedList<HeapNode> tuple = new LinkedList<>();
-		for (Map.Entry<String, LinkedList<Integer>> entry : positions.entrySet()) {
+		Map<String, List<Integer>> positions = findPositions(terms, text);
+		positions.entrySet().forEach(e -> System.out.println(e.getKey() + ": " + e.getValue().stream().map(String::valueOf).collect(Collectors.joining(" "))));
+		List<HeapNode> tuple = new LinkedList<>();
+		for (Map.Entry<String, List<Integer>> entry : positions.entrySet()) {
 			tuple.add(new HeapNode(entry.getKey(), entry.getValue().get(0), 0));
 		}
 		List<HeapNode> best = new ArrayList<>(tuple);
@@ -22,7 +24,7 @@ public class TextExcerpt {
 		while (nextSolutionFeasible(positions, tuple)) {
 			tuple = nextSolution(positions, tuple);
 			int score = calculateScore(tuple);
-			if (score > bestScore) {
+			if (score < bestScore) {
 				bestScore = score;
 				best = new ArrayList<>(tuple);
 			}
@@ -34,8 +36,8 @@ public class TextExcerpt {
 		return result.toString();
 	}
 
-	private static Map<String, LinkedList<Integer>> findPositions(List<String> terms, String[] text) {
-		Map<String, LinkedList<Integer>> positions = new HashMap<>();
+	private static Map<String, List<Integer>> findPositions(List<String> terms, String[] text) {
+		Map<String, List<Integer>> positions = new HashMap<>();
 		for (int i = 0; i < text.length; i++) {
 			if (terms.contains(text[i])) {
 				if (positions.containsKey(text[i]))
@@ -61,14 +63,14 @@ public class TextExcerpt {
 		return maxNode;
 	}
 
-	private static LinkedList<HeapNode> nextSolution(Map<String, LinkedList<Integer>> positions, LinkedList<HeapNode> tuple) {
+	private static List<HeapNode> nextSolution(Map<String, List<Integer>> positions, List<HeapNode> tuple) {
 		HeapNode minNode = getMinPosNode(tuple);
 		tuple.remove(minNode);
 		tuple.add(new HeapNode(minNode.term, positions.get(minNode.term).get(minNode.index + 1), minNode.index + 1));
 		return tuple;
 	}
 
-	private static boolean nextSolutionFeasible(Map<String, LinkedList<Integer>> positions, LinkedList<HeapNode> tuple) {
+	private static boolean nextSolutionFeasible(Map<String, List<Integer>> positions, List<HeapNode> tuple) {
 		HeapNode minNode = getMinPosNode(tuple);
 		return (minNode.index + 1) < positions.get(minNode.term).size();
 	}
