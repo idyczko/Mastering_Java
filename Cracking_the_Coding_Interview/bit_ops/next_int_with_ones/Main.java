@@ -6,7 +6,8 @@ public class Main {
 		print(input);
 		print(bruteBigger(input));
 		print(smartBigger(input));
-		//print(bruteSmaller(input));
+		print(bruteSmaller(input));
+		print(smartSmaller(input));
 	}
 
 	private static int smartBigger(int i) {
@@ -25,6 +26,25 @@ public class Main {
 		int zeroLastBitsMask = ~0 << endBlock;
 		int setLastBits = (1 << (endBlock - startBlock - 1)) - 1;
 		return setOne & zeroLastBitsMask | setLastBits;
+	}
+
+	private static int smartSmaller(int i) {
+		int firstOneAfterZero = 0;
+		int firstBlockOnes = 0;
+		int j = i;
+		if ((j & 1) == 1)
+			while((j & 1) == 1) {
+				firstBlockOnes++;
+				j >>= 1;
+			}
+		firstOneAfterZero = firstBlockOnes;
+		while ((j & 1) == 0) {
+			firstOneAfterZero++;
+			j >>= 1;
+		}
+		int zeroMask = ~0 << firstOneAfterZero + 1;
+		int ones = ((1 << (firstBlockOnes + 1)) - 1) << (firstOneAfterZero - firstBlockOnes - 1);
+		return i & zeroMask | ones;
 	}
 
 	private static int log(int i) {
