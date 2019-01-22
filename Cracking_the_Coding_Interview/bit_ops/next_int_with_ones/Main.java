@@ -5,7 +5,35 @@ public class Main {
 		int input = Integer.valueOf(args[0]);
 		print(input);
 		print(bruteBigger(input));
-		print(bruteSmaller(input));
+		print(smartBigger(input));
+		//print(bruteSmaller(input));
+	}
+
+	private static int smartBigger(int i) {
+		int startBlock = 0;
+		int j = i;
+		while ((j & 1) == 0) {
+			startBlock++;
+			j >>= 1;
+		}
+		int endBlock = startBlock;
+		while ((j & 1) == 1) {
+			endBlock++;
+			j >>= 1;
+		}
+		int setOne = i | 1 << endBlock;
+		int zeroLastBitsMask = ~0 << endBlock;
+		int setLastBits = (1 << (endBlock - startBlock - 1)) - 1;
+		return setOne & zeroLastBitsMask | setLastBits;
+	}
+
+	private static int log(int i) {
+		int log = 0;
+		do {
+			log++;
+			i >>= 1;
+		} while (i != 0);
+		return log;
 	}
 
 	private static int bruteBigger(int i) {
@@ -24,7 +52,7 @@ public class Main {
 
 	private static void print(int i) {
 		String n = String.valueOf(i & 1);
-		while ((i >>= 1) != 0)
+		while ((i >>= 1) > 0)
 			n = (i & 1) + n;
 		System.out.println(n);
 	}
