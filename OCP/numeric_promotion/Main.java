@@ -12,5 +12,9 @@ public class Main {
 		f = l + f; //f will hold complete garbage, but compiler won't complain.
 		e = e + l; //e will hold 10E17, 0.1 will be naturally dropped due to binary representation boundries.
 		System.out.println(s + " " + d + " " + l + " " + f + " " + e);
+
+		long ll = 10; //It is fine, 10 literal is interpreted as int and a promotion to long happens.
+		//long lll = 3000000000; //Not OK! Java tries first to interpret the literal as int! You have to add L postfix!
+		long lll = 30000000000L;
 	}
 }
