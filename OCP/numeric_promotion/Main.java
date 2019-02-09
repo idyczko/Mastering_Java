@@ -16,5 +16,8 @@ public class Main {
 		long ll = 10; //It is fine, 10 literal is interpreted as int and a promotion to long happens.
 		//long lll = 3000000000; //Not OK! Java tries first to interpret the literal as int! You have to add L postfix!
 		long lll = 30000000000L;
+
+		float ff = 10;//Fine, int -> float is promoted without loss of data.
+		//float fff = 1.0;// 1.0 is interpreted as double and double -> float may be lossy!
 	}
 }
