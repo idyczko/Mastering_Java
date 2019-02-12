@@ -9,5 +9,14 @@ public class Main {
 		short s = 50;
 
 		System.out.println((x > l) + " " + (s > f) + " " + (d > l));
+
+
+		System.out.println(true || eval());
+		System.out.println(true | eval());
+	}
+
+	private static boolean eval() {
+		System.out.println("Eval");
+		return true;
 	}
 }
