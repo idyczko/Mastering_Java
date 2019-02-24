@@ -1,3 +1,4 @@
+import java.util.*;
 
 public class Main {
 
@@ -9,27 +10,30 @@ public class Main {
 		int C = in.nextInt();
 		int L = in.nextInt();
 		int H = in.nextInt();
-		boolean[][] pizza = new boolean[R][C];
-		String line = "";
+		char[][] pizza = new char[R][C];
+		String line = in.nextLine();
 		for(int i = 0; i < R; i++) {
 			line = in.nextLine();
 			char[] chars = line.toCharArray();
 			for (int j = 0; j < chars.length; j++) {
-				pizza[i][j] = chars[j] == 'M';
+				pizza[i][j] = chars[j];
 			}
 		}
+		List<Slice> initialSolution = new ArrayList<>();
+		slices.add(new)
+		print(pizza);
 	}
 
-	public static void print(boolean[][] pizza) {
-		for (boolean[] row : pizza) {
-			for (boolean ing : row)
-				System.out.print(ing ? "M " : "T ");
+	public static void print(char[][] pizza) {
+		for (char[] row : pizza) {
+			for (char ing : row)
+				System.out.print(ing + " ");
 			System.out.println();
 		}
 	}
 
 	public static boolean intersect(Slice s1, Slice s2) {
-		
+		return false;
 	} 
 
 	public static class Slice {
@@ -45,7 +49,10 @@ public class Main {
 			this.lowerRight = new Point(maxX, maxY);
 
 		}
-
+		
+		int size() {
+			return (1 + lowerRight.x - upperLeft.x)*(1 + lowerRight.y - upperLeft.y);
+		}
 	}
 
 	public static class Point {
