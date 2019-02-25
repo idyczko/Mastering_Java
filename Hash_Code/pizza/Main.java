@@ -35,6 +35,18 @@ public class Main {
 			print(pizza);
 		if (Arrays.asList(args).contains("-s"))
 			initSlices.forEach(System.out::println);
+
+		searchSolutionSpace(initSlices);
+	}
+	
+	private static void searchSolutionSpace(Set<Slice> initSlices) {
+		Set<Slice> tabu = HashSet<>();
+		while (true) {
+			Slice slice = chooseSlice(initSlices);
+			initSlices.remove(slice);
+			checkIntersect(expand(slice), initSlices);
+			
+		}
 	}
 
 	private static Set<Slice> computeInitSlices(char[][] pizza, int L, int H) {
@@ -46,7 +58,7 @@ public class Main {
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < C; j++) {
 				if (log)
-					System.out.println("Cell: " + (i*R + j) +"/" + (R*C));
+					System.out.println("Cell: " + (i*C + j) +"/" + (R*C));
 
 				slices.addAll(computeMinimalSlicesForCenter(i, j, pizza));
 			}
