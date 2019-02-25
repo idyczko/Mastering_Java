@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class Solution {
 
   private static int R;
   private static int C;
@@ -35,7 +35,7 @@ public class Main {
       log = true;
 
     Set<Slice> initSlices = computeInitSlices(pizza, L, H);
-    PriorityQueue<Slice> priorityQueue = new PriorityQueue<Slice>(R*C, Comparator.comparingInt(Slice::size).reversed());
+    PriorityQueue<Slice> priorityQueue = new PriorityQueue<Slice>(R*C, Comparator.comparingInt(Slice::size));
     System.out.println("///////////////////////////////");
     priorityQueue.addAll(initSlices);
 
@@ -53,8 +53,92 @@ public class Main {
       initSlices.forEach(System.out::println);
 
     System.out.println("///////////////////////////// Solution ////////////////////////");
-    if (Arrays.asList(args).contains("-sol"))
+    if (Arrays.asList(args).contains("-sol")) {
       solution.forEach(System.out::println);
+      char[][] slicedPizza = markPizza(solution);
+      print(slicedPizza);
+
+      Set<Slice> sol = searchSolutionSpace(solution);
+      System.out.println("///////////////////////////// Expanded Solution ////////////////////////");
+      sol.forEach(System.out::println);
+      char[][] slicedPizzaSol = markPizza(sol);
+      print(slicedPizzaSol);
+    }
+
+
+  }
+
+  private static char[][] markPizza(Set<Slice> solution) {
+
+    char[][] slicedPizza = pizza.clone();
+    int index = 0;
+    for (Slice slice : solution) {
+      index++;
+      for (int i = 0; i < R; i++) {
+        for (int j = 0; j < C; j++) {
+          if (i >= slice.upperLeft.y && i <= slice.lowerRight.y && j >= slice.upperLeft.x && j <= slice.lowerRight.x) {
+            slicedPizza[i][j] = (char)('0'+ index);
+          }
+        }
+      }
+    }
+    return slicedPizza;
+  }
+
+  private static Set<Slice> searchSolutionSpace(Set<Slice> initSlices) {
+    Set<Slice> tabu = new HashSet<>();
+    while (!initSlices.isEmpty()) {
+      Optional<Slice> sliceOp = initSlices.stream().findAny();
+      Slice slice = sliceOp.get();
+      initSlices.remove(slice);
+      Slice expanded = expand(slice, tabu, initSlices);
+      if (expanded.equals(slice)) {
+        tabu.add(slice);
+        continue;
+      }
+      boolean intersects = intersectS(expanded, tabu, initSlices);
+      if (intersects)
+        tabu.add(slice);
+      else
+        initSlices.add(expanded);
+    }
+
+    return tabu;
+  }
+
+
+  private static Slice expand(Slice slice, Set<Slice> s1, Set<Slice> s2) {
+    Slice expanded = null;
+    try {
+      expanded = slice.expandLeft();
+    } catch(IllegalStateException e) {
+    }
+
+    if (expanded == null || intersectS(expanded, s1, s2)) {
+      try {
+        expanded = slice.expandRight();
+      } catch(IllegalStateException e) {
+      }
+    }
+    if (expanded == null || intersectS(expanded, s1, s2)) {
+      try {
+        expanded = slice.expandUp();
+      } catch(IllegalStateException e) {
+      }
+    }
+    if (expanded == null || intersectS(expanded, s1, s2)) {
+      try {
+        expanded = slice.expandDown();
+      } catch(IllegalStateException e) {
+      }
+    }
+    return expanded != null && !intersectS(expanded, s1, s2) ? expanded : slice;
+  }
+
+  private static boolean intersectS(Slice slice, Set<Slice> s1, Set<Slice> s2) {
+    boolean intersects = s1.stream().anyMatch(s -> intersect(s, slice));
+    intersects |= s2.stream().anyMatch(s -> intersect(s, slice));
+    return intersects;
   }
 
   private static Set<Slice> computeInitSlices(char[][] pizza, int L, int H) {
