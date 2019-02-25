@@ -7,6 +7,7 @@ public class Main {
 	private static int L;
 	private static int H;
 	private static char[][] pizza;
+	private static boolean log = false;
 
 	public static void main(String[] args) {
 
@@ -25,9 +26,15 @@ public class Main {
 				pizza[i][j] = chars[j];
 			}
 		}
+		if (Arrays.asList(args).contains("-l"))
+			log = true;
+
 		Set<Slice> initSlices = computeInitSlices(pizza, L, H);
-		print(pizza);
-		initSlices.forEach(System.out::println);
+
+		if (Arrays.asList(args).contains("-p"))
+			print(pizza);
+		if (Arrays.asList(args).contains("-s"))
+			initSlices.forEach(System.out::println);
 	}
 
 	private static Set<Slice> computeInitSlices(char[][] pizza, int L, int H) {
@@ -38,6 +45,9 @@ public class Main {
 		Set<Slice> slices = new HashSet<>();
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < C; j++) {
+				if (log)
+					System.out.println("Cell: " + (i*R + j) +"/" + (R*C));
+
 				slices.addAll(computeMinimalSlicesForCenter(i, j, pizza));
 			}
 		}
