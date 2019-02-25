@@ -67,7 +67,7 @@ public class Main {
 			slices.add(slice);
 			return;
 		}
-		if (slice.size() >= 2*L)
+		if (slice.size() >= H)
 			return;
 
 		try {
