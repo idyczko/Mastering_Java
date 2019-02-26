@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.*;
 
 public class Main {
 
@@ -8,12 +9,16 @@ public class Main {
   private static int L;
   private static int H;
   private static int LIM;
+  private static boolean concurrent = false;
   private static char[][] pizza;
   private static boolean log = false;
 
+  private static final ExecutorService pool = Executors.newFixedThreadPool(8);
+
   public static void main(String[] args) {
-    if (option(args, "-l"))
-      log = true;
+    log |= option(args, "-l");
+    concurrent |= option(args, "-c");
+
     Scanner in = new Scanner(System.in);
 
     R = in.nextInt();
@@ -60,7 +65,8 @@ public class Main {
   }
 
   private static Set<Slice> createSolutionByOrderedPick() {
-    Set<Slice> initSlices = computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
+    Set<Slice> initSlices = concurrent ? computeLimitedSlicesConcurrently(pizza, L, H, Math.max(Math.min(H, LIM), 2*L)) : computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
+    System.out.println("Finished");
     PriorityQueue<Slice> priorityQueue = new PriorityQueue<Slice>(R*C, Comparator.comparingInt(Slice::size));
     priorityQueue.addAll(initSlices);
 
@@ -147,6 +153,31 @@ public class Main {
     }
 
     return slices;
+  }
+
+  private static Set<Slice> computeLimitedSlicesConcurrently(char[][] pizza, int L, int H, int limit) {
+    Map<Slice, Object> slices = new ConcurrentHashMap<>();
+    for (int i = 0; i < R; i++) {
+      final int I = i;
+      pool.execute(() -> computeLimitedSlicesForRow(pizza, L, H, limit, I, slices));
+    }
+
+    pool.shutdown();
+    try {
+        pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    } catch (InterruptedException e) {
+    }
+
+    return new HashSet<> (slices.keySet());
+  }
+
+  private static void computeLimitedSlicesForRow(char[][] pizza, int L, int H, int limit, int i,   Map<Slice, Object> slices) {
+    Set<Slice> rowSlices = new HashSet<>();
+    for (int j = 0; j < C; j++) {
+      log("Cell: " + (i*C + j) +"/" + (R*C));
+      rowSlices.addAll(generateLimitedSlicesForCenter(i, j, pizza, limit));
+    }
+    rowSlices.forEach(s -> slices.put(s, ""));
   }
 
   private static Set<Slice> computeAllFeasibleSlicesForCenter(int i, int j, char[][] pizza) {
