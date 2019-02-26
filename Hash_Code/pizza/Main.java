@@ -34,7 +34,7 @@ public class Main {
 
     if(log) {
       orderedPickSolution.forEach(System.out::println);
-      char[][] slicedPizza = markPizza(orderedPickSolution);
+      String[][] slicedPizza = markPizza(orderedPickSolution);
       print(slicedPizza);
     }
 
@@ -42,10 +42,12 @@ public class Main {
     log(String.format(TAG, "Expansion Solution"));
     if(log) {
       expansionSolution.forEach(System.out::println);
-      char[][] slicedPizzaSol = markPizza(expansionSolution);
+      String[][] slicedPizzaSol = markPizza(expansionSolution);
       print(slicedPizzaSol);
     }
-
+    String[][] slicedPizzaSol = markPizza(expansionSolution);
+    print(slicedPizzaSol);
+    System.out.println("Solution cost: " +  cost(expansionSolution) + " pizza size: " + (C*R));
   }
 
   private static Set<Slice> createSolutionByOrderedPick() {
@@ -217,6 +219,10 @@ public class Main {
     return true;
   }
 
+  private static int cost(Set<Slice> slices) {
+    return slices.stream().mapToInt(s -> s.size()).sum();
+  }
+
   private static void readPizza(Scanner sc) {
     String line = sc.nextLine();
     for(int i = 0; i < R; i++) {
@@ -228,21 +234,31 @@ public class Main {
     }
   }
 
-  private static char[][] markPizza(Set<Slice> solution) {
-    char[][] slicedPizza = pizza.clone();
+  private static String[][] markPizza(Set<Slice> solution) {
+    String[][] slicedPizza = new String[R][C];
+    for (int i = 0; i < C; i++)
+      for (int j = 0; j < R; j++)
+        slicedPizza[j][i] = "" + pizza[j][i];
     int index = 0;
     for (Slice slice : solution) {
-      index++;
       for (int i = slice.upperLeft.y; i <= slice.lowerRight.y; i++)
         for (int j = slice.upperLeft.x; j <= slice.lowerRight.x; j++)
-            slicedPizza[i][j] = (char)('0'+ index);
-
+            slicedPizza[i][j] = String.valueOf(index);
+      index++;
     }
     return slicedPizza;
   }
 
   private static boolean option(String[] args, String op) {
     return Arrays.stream(args).anyMatch(a -> a.equals(op));
+  }
+
+  private static void print(String[][] pizza) {
+    for (String[] row : pizza) {
+      for (String ing : row)
+        System.out.print(ing + "\t");
+      System.out.println();
+    }
   }
 
   private static void print(char[][] pizza) {
