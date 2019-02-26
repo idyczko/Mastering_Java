@@ -7,19 +7,29 @@ public class Main {
   private static int C;
   private static int L;
   private static int H;
+  private static int LIM;
   private static char[][] pizza;
   private static boolean log = false;
 
   public static void main(String[] args) {
     if (option(args, "-l"))
       log = true;
-
     Scanner in = new Scanner(System.in);
 
     R = in.nextInt();
     C = in.nextInt();
     L = in.nextInt();
     H = in.nextInt();
+
+    if (option(args, "-lim")) {
+      for (int i = 0; i < args.length; i++)
+      if (args[i].equals("-lim")) {
+        LIM = Integer.valueOf(args[i+1]);
+        break;
+      }
+    } else {
+      LIM = H;
+    }
     pizza = new char[R][C];
     readPizza(in);
 
@@ -45,13 +55,12 @@ public class Main {
       String[][] slicedPizzaSol = markPizza(expansionSolution);
       print(slicedPizzaSol);
     }
-    String[][] slicedPizzaSol = markPizza(expansionSolution);
-    print(slicedPizzaSol);
-    System.out.println("Solution cost: " +  cost(expansionSolution) + " pizza size: " + (C*R));
+
+    System.out.println("Solution score: " +  score(expansionSolution) + " pizza size: " + (C*R));
   }
 
   private static Set<Slice> createSolutionByOrderedPick() {
-    Set<Slice> initSlices = computeLimitedSlices(pizza, L, H, H);
+    Set<Slice> initSlices = computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
     PriorityQueue<Slice> priorityQueue = new PriorityQueue<Slice>(R*C, Comparator.comparingInt(Slice::size));
     priorityQueue.addAll(initSlices);
 
@@ -76,7 +85,7 @@ public class Main {
       initSlices.remove(slice);
       Slice expanded = expand(slice, nonExpandable, initSlices);
 
-      if (expanded.equals(slice)) {
+      if (expanded.equals(slice) || expanded.size() > H) {
         nonExpandable.add(slice);
         continue;
       }
@@ -126,10 +135,6 @@ public class Main {
       if (set.stream().anyMatch(s -> intersect(s, slice)))
         return true;
     return false;
-  }
-
-  private static Set<Slice> computeInitSlices(char[][] pizza, int L, int H) {
-    return computeLimitedSlices(pizza, L, H, 2*L);
   }
 
   private static Set<Slice> computeLimitedSlices(char[][] pizza, int L, int H, int limit) {
@@ -219,7 +224,7 @@ public class Main {
     return true;
   }
 
-  private static int cost(Set<Slice> slices) {
+  private static int score(Set<Slice> slices) {
     return slices.stream().mapToInt(s -> s.size()).sum();
   }
 
