@@ -1,9 +1,15 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
-public class Main {
+public class Main{
 
   private static final String TAG = "///////////////////////////////////// %s /////////////////////////////////////";
+  private static final String RESULT_FILENAME = "result.out";
   private static int R;
   private static int C;
   private static int L;
@@ -12,12 +18,14 @@ public class Main {
   private static boolean concurrent = false;
   private static char[][] pizza;
   private static boolean log = false;
+  private static boolean saveResult = false;
 
   private static final ExecutorService pool = Executors.newFixedThreadPool(8);
 
   public static void main(String[] args) {
     log |= option(args, "-l");
     concurrent |= option(args, "-c");
+    saveResult |= option(args, "-s");
 
     Scanner in = new Scanner(System.in);
 
@@ -28,10 +36,10 @@ public class Main {
 
     if (option(args, "-lim")) {
       for (int i = 0; i < args.length; i++)
-      if (args[i].equals("-lim")) {
-        LIM = Integer.valueOf(args[i+1]);
-        break;
-      }
+        if (args[i].equals("-lim")) {
+          LIM = Integer.valueOf(args[i+1]);
+          break;
+        }
     } else {
       LIM = H;
     }
@@ -49,25 +57,41 @@ public class Main {
 
     if(log) {
       orderedPickSolution.forEach(System.out::println);
-      String[][] slicedPizza = markPizza(orderedPickSolution);
-      print(slicedPizza);
+      String[][] slicedPizzaByOrderedPick = markPizza(orderedPickSolution);
+      print(slicedPizzaByOrderedPick);
     }
 
     Set<Slice> expansionSolution = searchSolutionSpaceByExpansion(orderedPickSolution);
+
+    if (saveResult) {
+      saveResultToFile(expansionSolution);
+    }
+
     log(String.format(TAG, "Expansion Solution"));
     if(log) {
       expansionSolution.forEach(System.out::println);
-      String[][] slicedPizzaSol = markPizza(expansionSolution);
-      print(slicedPizzaSol);
+      String[][] slicedPizzaByExpansion = markPizza(expansionSolution);
+      print(slicedPizzaByExpansion);
     }
 
     System.out.println("Solution score: " +  score(expansionSolution) + " pizza size: " + (C*R));
   }
 
+  private static void saveResultToFile(Set<Slice> expansionSolution) {
+    Path path = Paths.get(".", RESULT_FILENAME);
+    List<String> results = expansionSolution.stream().map(Slice::toSaveString).collect(Collectors.toList());
+    results.add(0, String.valueOf(expansionSolution.size()));
+    try {
+      Files.write(path, results);
+    } catch (IOException e){
+      System.out.println(e.getMessage());
+    }
+  }
+
   private static Set<Slice> createSolutionByOrderedPick() {
     Set<Slice> initSlices = concurrent ? computeLimitedSlicesConcurrently(pizza, L, H, Math.max(Math.min(H, LIM), 2*L)) : computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
     System.out.println("Finished");
-    PriorityQueue<Slice> priorityQueue = new PriorityQueue<Slice>(R*C, Comparator.comparingInt(Slice::size));
+    PriorityQueue<Slice> priorityQueue = new PriorityQueue<>(R * C, Comparator.comparingInt(Slice::size));
     priorityQueue.addAll(initSlices);
 
     Set<Slice> solution = new HashSet<>(Arrays.asList(priorityQueue.poll()));
@@ -164,7 +188,7 @@ public class Main {
 
     pool.shutdown();
     try {
-        pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+      pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
     } catch (InterruptedException e) {
     }
 
@@ -279,7 +303,7 @@ public class Main {
     for (Slice slice : solution) {
       for (int i = slice.upperLeft.y; i <= slice.lowerRight.y; i++)
         for (int j = slice.upperLeft.x; j <= slice.lowerRight.x; j++)
-            slicedPizza[i][j] = String.valueOf(index);
+          slicedPizza[i][j] = String.valueOf(index);
       index++;
     }
     return slicedPizza;
@@ -344,6 +368,10 @@ public class Main {
     @Override
     public String toString() {
       return "upperLeft: " + upperLeft.toString() + " lowerRight: " + lowerRight.toString() + " size: " + this.size();
+    }
+
+    public String toSaveString() {
+      return upperLeft.x + " " + upperLeft.y + " " + lowerRight.x + " " + lowerRight.y;
     }
 
     Slice expandLeft() {
