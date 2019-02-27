@@ -36,7 +36,7 @@ public class Main{
     C = in.nextInt();
     L = in.nextInt();
     H = in.nextInt();
-    LIM = checkValue(args, "-lim", H);
+    LIM = Math.max(Math.min(H, checkValue(args, "-lim", H)), 2*L);
     THREADS = checkValue(args, "-c", 8);
     pool = Executors.newFixedThreadPool(8);
     stats+= "Concurrency: " + concurrent  + " Threads: " + THREADS+ " Limiting size: " + LIM + "\n";
@@ -87,25 +87,37 @@ public class Main{
   }
 
   private static Set<Slice> createSolutionByOrderedPick() {
+    Set<Slice> initSlices = computeInitialSlices(pizza, L, H, LIM);
+
     long starttime = System.currentTimeMillis();
-    Set<Slice> initSlices = concurrent ? computeLimitedSlicesConcurrently(pizza, L, H, Math.max(Math.min(H, LIM), 2*L)) : computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
-    long endtime = System.currentTimeMillis();
-    stats += "Initial Set: " + (endtime - starttime) + " millis.\n";
-    PriorityQueue<Slice> priorityQueue = new PriorityQueue<>(R * C, Comparator.comparingInt(Slice::size));
+    PriorityQueue<Slice> priorityQueue = new PriorityQueue<>(R * C, sizeAndDistanceComparator());
     priorityQueue.addAll(initSlices);
 
     Set<Slice> solution = new HashSet<>(Arrays.asList(priorityQueue.poll()));
     while(!priorityQueue.isEmpty()) {
       Slice slice = priorityQueue.poll();
-      boolean intersects = solution.stream().anyMatch(s -> intersect(slice, s));
-      if (!intersects)
+      if (!intersect(slice, solution))
         solution.add(slice);
     }
-
-    if (log)
-      initSlices.forEach(System.out::println);
-
+    long endtime = System.currentTimeMillis();
+    stats += "Ordered Pick Solution: " + (endtime - starttime) + " millis. Score: " + score(solution);
     return solution;
+  }
+
+  public static Comparator<Slice> sizeAndDistanceComparator() {
+    return (s1, s2) -> s1.size() != s2.size() ? s1.size() - s2.size() : (Math.max(s1.upperLeft.x, s1.upperLeft.y) - Math.max(s2.upperLeft.x, s2.upperLeft.y));
+  }
+
+  public static Comparator<Slice> sizeComparator() {
+    return (s1, s2) -> s1.size() - s2.size();
+  }
+
+  private static Set<Slice> computeInitialSlices(char[][] pizza, int L, int H, int LIM) {
+    long starttime = System.currentTimeMillis();
+    Set<Slice> initSlices = concurrent ? computeLimitedSlicesConcurrently(pizza, L, H, LIM) : computeLimitedSlices(pizza, L, H, LIM);
+    long endtime = System.currentTimeMillis();
+    stats += "Initial Set: " + (endtime - starttime) + " millis.\n";
+    return initSlices;
   }
 
   private static Set<Slice> searchSolutionSpaceByExpansion(Set<Slice> initSlices) {
@@ -162,8 +174,8 @@ public class Main{
 
   private static boolean intersect(Slice slice, Set... sets) {
     for (Set<Slice> set : sets)
-      if (set.stream().anyMatch(s -> intersect(s, slice)))
-        return true;
+        if (set.parallelStream().anyMatch(s -> intersect(s, slice)))
+          return true;
     return false;
   }
 
