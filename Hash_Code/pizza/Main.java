@@ -1,3 +1,4 @@
+import java.util.concurrent.atomic.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ public class Main{
   private static boolean saveResult = false;
   private static String stats = "";
   private static int THREADS;
+  private static int GRAN;
 
   private static ExecutorService pool;
 
@@ -38,8 +40,9 @@ public class Main{
     H = in.nextInt();
     LIM = Math.max(Math.min(H, checkValue(args, "-lim", H)), 2*L);
     THREADS = checkValue(args, "-c", 8);
+    GRAN = checkValue(args, "-gran", 1);
     pool = Executors.newFixedThreadPool(8);
-    stats+= "Concurrency: " + concurrent  + " Threads: " + THREADS+ " Limiting size: " + LIM + "\n";
+    stats+= "Concurrency: " + concurrent  + " Threads: " + THREADS+ " Limiting size: " + LIM + " Granularity: " + GRAN +"\n";
 
     pizza = new char[R][C];
     readPizza(in);
@@ -59,7 +62,7 @@ public class Main{
       print(slicedPizzaByOrderedPick);
     }
 
-    Set<Slice> expansionSolution = searchSolutionSpaceByExpansion(orderedPickSolution);
+    Set<Slice> expansionSolution = concurrent ? searchSolutionSpaceByConcurrentExpansion(orderedPickSolution) : searchSolutionSpaceByExpansion(orderedPickSolution);
 
     if (saveResult) {
       saveResultToFile(expansionSolution);
@@ -121,8 +124,8 @@ public class Main{
   }
 
   private static Set<Slice> searchSolutionSpaceByExpansion(Set<Slice> initSlices) {
-    long starttime = System.currentTimeMillis();
     Set<Slice> nonExpandable = new HashSet<>();
+    long starttime = System.currentTimeMillis();
     while (!initSlices.isEmpty()) {
       Slice slice = chooseSliceForExpansion(initSlices);
       initSlices.remove(slice);
@@ -136,9 +139,59 @@ public class Main{
       initSlices.add(expanded);
     }
     long endtime = System.currentTimeMillis();
-    stats += "Expansion Solution: " + (endtime - starttime) + " millis. Score: " + score(nonExpandable) +"\n";
-
+    stats += "Single Threaded Expansion Solution: " + (endtime - starttime) + " millis. Score: " + score(nonExpandable) +"\n";
     return nonExpandable;
+  }
+
+  private static Set<Slice> searchSolutionSpaceByConcurrentExpansion(Set<Slice> initSlices) {
+    ExecutorService pool = Executors.newFixedThreadPool(THREADS);
+    AtomicInteger score = new AtomicInteger(0);
+    Solution solution = new Solution(null);
+    long starttime = System.currentTimeMillis();
+    pool.execute(() -> searchSolutionSpaceByExpansion(new HashSet<>(initSlices), score, solution));
+    int i = 0;
+    for (Slice slice : initSlices) {
+      if (i++ % GRAN == 0) {
+        Set<Slice> copy = new HashSet<>(initSlices);
+        copy.remove(slice);
+        pool.execute(() -> searchSolutionSpaceByExpansion(copy, score, solution));
+      }
+    }
+
+    pool.shutdown();
+    try {
+      pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    } catch (InterruptedException e) {
+    }
+
+    long endtime = System.currentTimeMillis();
+    stats += "Multi Threaded Expansion Solution: " + (endtime - starttime) + " millis. Score: " + score.get() +"\n";
+    return solution.solution;
+  }
+
+  private static void searchSolutionSpaceByExpansion(Set<Slice> initSlices, final AtomicInteger score, final Solution solution) {
+    Set<Slice> nonExpandable = new HashSet<>();
+    while (!initSlices.isEmpty()) {
+      Slice slice = chooseSliceForExpansion(initSlices);
+      initSlices.remove(slice);
+      Slice expanded = expand(slice, nonExpandable, initSlices);
+
+      if (expanded.equals(slice) || expanded.size() > H) {
+        nonExpandable.add(slice);
+        continue;
+      }
+
+      initSlices.add(expanded);
+    }
+
+    synchronized(score) {
+      int curr = score(nonExpandable);
+      if (score.get() < curr) {
+        score.set(curr);
+        solution.solution = nonExpandable;
+      }
+    }
+
   }
 
   private static Slice chooseSliceForExpansion(Set<Slice> slices) {
@@ -357,6 +410,14 @@ public class Main{
   private static void log(String str) {
     if (log)
       System.out.println(str);
+  }
+
+  private static class Solution {
+    Set<Slice> solution;
+
+    Solution(Set<Slice> solution) {
+      this.solution = solution;
+    }
   }
 
   private static class Slice {
