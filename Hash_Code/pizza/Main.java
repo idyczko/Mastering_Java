@@ -100,7 +100,7 @@ public class Main{
         solution.add(slice);
     }
     long endtime = System.currentTimeMillis();
-    stats += "Ordered Pick Solution: " + (endtime - starttime) + " millis. Score: " + score(solution);
+    stats += "Ordered Pick Solution: " + (endtime - starttime) + " millis. Score: " + score(solution) + "\n";
     return solution;
   }
 
@@ -121,6 +121,7 @@ public class Main{
   }
 
   private static Set<Slice> searchSolutionSpaceByExpansion(Set<Slice> initSlices) {
+    long starttime = System.currentTimeMillis();
     Set<Slice> nonExpandable = new HashSet<>();
     while (!initSlices.isEmpty()) {
       Slice slice = chooseSliceForExpansion(initSlices);
@@ -134,6 +135,8 @@ public class Main{
 
       initSlices.add(expanded);
     }
+    long endtime = System.currentTimeMillis();
+    stats += "Expansion Solution: " + (endtime - starttime) + " millis. Score: " + score(nonExpandable) +"\n";
 
     return nonExpandable;
   }
