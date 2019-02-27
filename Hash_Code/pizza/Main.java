@@ -17,6 +17,7 @@ public class Main{
   private static int H;
   private static int LIM;
   private static boolean concurrent = false;
+  private static boolean con_exp = false;
   private static char[][] pizza;
   private static boolean log = false;
   private static boolean saveResult = false;
@@ -30,6 +31,7 @@ public class Main{
     log |= option(args, "-l");
     concurrent |= option(args, "-c");
     saveResult |= option(args, "-s");
+    con_exp |= option(args, "-conexp");
 
 
     Scanner in = new Scanner(System.in);
@@ -62,7 +64,7 @@ public class Main{
       print(slicedPizzaByOrderedPick);
     }
 
-    Set<Slice> expansionSolution = concurrent ? searchSolutionSpaceByConcurrentExpansion(orderedPickSolution) : searchSolutionSpaceByExpansion(orderedPickSolution);
+    Set<Slice> expansionSolution = concurrent && con_exp ? searchSolutionSpaceByConcurrentExpansion(orderedPickSolution) : searchSolutionSpaceByExpansion(orderedPickSolution);
 
     if (saveResult) {
       saveResultToFile(expansionSolution);
