@@ -19,13 +19,16 @@ public class Main{
   private static char[][] pizza;
   private static boolean log = false;
   private static boolean saveResult = false;
+  private static String stats = "";
+  private static int THREADS;
 
-  private static final ExecutorService pool = Executors.newFixedThreadPool(8);
+  private static ExecutorService pool;
 
   public static void main(String[] args) {
     log |= option(args, "-l");
     concurrent |= option(args, "-c");
     saveResult |= option(args, "-s");
+
 
     Scanner in = new Scanner(System.in);
 
@@ -33,16 +36,11 @@ public class Main{
     C = in.nextInt();
     L = in.nextInt();
     H = in.nextInt();
+    LIM = checkValue(args, "-lim", H);
+    THREADS = checkValue(args, "-c", 8);
+    pool = Executors.newFixedThreadPool(8);
+    stats+= "Concurrency: " + concurrent  + " Threads: " + THREADS+ " Limiting size: " + LIM + "\n";
 
-    if (option(args, "-lim")) {
-      for (int i = 0; i < args.length; i++)
-        if (args[i].equals("-lim")) {
-          LIM = Integer.valueOf(args[i+1]);
-          break;
-        }
-    } else {
-      LIM = H;
-    }
     pizza = new char[R][C];
     readPizza(in);
 
@@ -74,7 +72,7 @@ public class Main{
       print(slicedPizzaByExpansion);
     }
 
-    System.out.println("Solution score: " +  score(expansionSolution) + " pizza size: " + (C*R));
+    System.out.println("Solution score: " +  score(expansionSolution) + " pizza size: " + (C*R) + " stats: \n" + stats);
   }
 
   private static void saveResultToFile(Set<Slice> expansionSolution) {
@@ -89,8 +87,10 @@ public class Main{
   }
 
   private static Set<Slice> createSolutionByOrderedPick() {
+    long starttime = System.currentTimeMillis();
     Set<Slice> initSlices = concurrent ? computeLimitedSlicesConcurrently(pizza, L, H, Math.max(Math.min(H, LIM), 2*L)) : computeLimitedSlices(pizza, L, H, Math.max(Math.min(H, LIM), 2*L));
-    System.out.println("Finished");
+    long endtime = System.currentTimeMillis();
+    stats += "Initial Set: " + (endtime - starttime) + " millis.\n";
     PriorityQueue<Slice> priorityQueue = new PriorityQueue<>(R * C, Comparator.comparingInt(Slice::size));
     priorityQueue.addAll(initSlices);
 
@@ -311,6 +311,16 @@ public class Main{
 
   private static boolean option(String[] args, String op) {
     return Arrays.stream(args).anyMatch(a -> a.equals(op));
+  }
+
+  private static int checkValue(String[] args, String arg, int defaultVal) {
+    if (option(args, arg)) {
+      for (int i = 0; i < args.length; i++)
+        if (args[i].equals(arg))
+          return (i + 1) < args.length && !args[i + 1].startsWith("-") ? Integer.valueOf(args[i+1]) : defaultVal;
+    }
+
+    return defaultVal;
   }
 
   private static void print(String[][] pizza) {
