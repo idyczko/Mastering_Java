@@ -459,7 +459,7 @@ public class Main{
     }
 
     public String toSaveString() {
-      return upperLeft.x + " " + upperLeft.y + " " + lowerRight.x + " " + lowerRight.y;
+      return upperLeft.y + " " + upperLeft.x + " " + lowerRight.y + " " + lowerRight.x;
     }
 
     Slice expandLeft() {
