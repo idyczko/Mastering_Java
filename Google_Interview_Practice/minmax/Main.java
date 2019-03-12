@@ -1,28 +1,37 @@
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Game g = new Game();
+		Game g = new Game(new Human(1), new MinMax(2, 1));
 		g.play();
 	}
 
 	private static class Game {
 		TicTacToe t = new TicTacToe();
+		Player p1;
+		Player p2;
 		
-		void play() {
-			Scanner sc = new Scanner(System.in);
-			while(!t.gameFinished()) {
-				printBoard();
-				int x = sc.nextInt();
-				int y = sc.nextInt();
-				t.move(new Point(x, y), 1);
-				computerMove();
-			}
-			printBoard();
+		Game(Player p1, Player p2) {
+			this.p1 = p1;
+			this.p2 = p2;
 		}
 
-		void computerMove(){}
+		void play() {
+			boolean p1Move = true;
+			while(!t.boardEvaluation().finished) {
+
+				printBoard();
+				if (p1Move)
+					p1.makeMove(this);
+				else
+					p2.makeMove(this);
+				p1Move = !p1Move;
+			}
+			printBoard();
+			System.out.println("Player " + t.boardEvaluation().winner + " is the victor.");
+		}
 
 		void printBoard() {
 			System.out.println("-------");
@@ -37,6 +46,65 @@ public class Main {
 		}
 	}
 
+	private static class MinMax implements Player {
+		int id;
+		int opponentsId;
+		MinMax(int id, int opponentsId) {this.id = id; this.opponentsId = opponentsId;}
+
+		@Override
+		public void makeMove(Game g) {
+			TicTacToe t = g.t;
+			g.t.move(minMax(g.t, new AtomicInteger(), true, 0), id);
+		}
+
+		Point minMax(TicTacToe t, AtomicInteger result, boolean max, int depth) {
+			if (t.gameFinished()) {
+				Result r = t.boardEvaluation();
+				if (r.winner == 0) {
+					result.set(0);
+				} else if (r.winner == this.id) {
+					result.set((100 - depth)*10);
+				} else {
+					result.set((depth - 100)*10);
+				}
+
+				return null;
+			}
+
+			Map<Point, AtomicInteger> points = new HashMap<>();
+
+			for (Point move : t.possibleMoves) {
+				AtomicInteger r = new AtomicInteger();
+				points.put(move, r);
+				minMax(t.copy().move(move, max ? this.id : this.opponentsId), r, !max, depth + 1);
+			}
+
+			Optional<Map.Entry<Point, AtomicInteger>> best = max ? points.entrySet().stream().max((e1, e2) -> e1.getValue().get() - e2.getValue().get()) :
+				points.entrySet().stream().min((e1, e2) -> e1.getValue().get() - e2.getValue().get());
+			result.set(best.get().getValue().get());
+			return best.get().getKey();
+		}
+	}
+
+	private static class Human implements Player {
+		int id;
+		Human(int id) {this.id = id;}
+
+		@Override
+		public void makeMove(Game g) {
+			Scanner sc = new Scanner(System.in);
+			int x = sc.nextInt();
+			int y = sc.nextInt();
+			g.t.move(new Point(x, y), id);
+		}
+
+	}
+
+	private interface Player {
+		
+		void makeMove(Game g);
+	}
+
 	private static class TicTacToe {
 		int[][] board = new int[3][3];
 		Set<Point> possibleMoves = new HashSet<>();
@@ -48,30 +116,31 @@ public class Main {
 		}
 
 		boolean gameFinished() {
-			return this.possibleMoves.isEmpty() || this.someoneWon();
+			return this.possibleMoves.isEmpty() || this.boardEvaluation().finished;
 		}
 
-		boolean someoneWon() {
+		Result boardEvaluation() {
 			for (int i = 0; i < 3; i++)
 				if ((this.board[i][i] != 0 && ((this.board[i][i] == this.board[i][(i + 1) % 3] && this.board[i][i] == this.board[i][(i + 2)% 3]) ||
 								(this.board[i][i] == this.board[(i + 1) % 3][i] && this.board[i][i] == this.board[(i + 2)% 3][i]))))
-						return true;
+						return new Result(true, this.board[i][i]);
 			
 			if (this.board[0][0] != 0 && this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2])
-				return true;
+				return new Result(true, this.board[1][1]);
 
 			if (this.board[0][2] != 0 && this.board[0][2] == this.board[1][1] && this.board[0][2] == this.board[2][0])
-				return true;
+				return new Result(true, this.board[1][1]);
 
-			return false;
+			return new Result(false, 0);
 		}
 
-		void move(Point move, int player) {
+		TicTacToe move(Point move, int player) {
 			if (!possibleMoves.contains(move) || player < 1 || player > 2)
 				throw new IllegalArgumentException();
 			
 			this.board[move.x][move.y] = player;
 			this.possibleMoves.remove(move);
+			return this;
 		}
 
 		TicTacToe copy() {
@@ -81,6 +150,16 @@ public class Main {
 				for (int j = 0; j < 3; j++)
 					c.board[i][j] = this.board[i][j];
 			return c;
+		}
+	}
+
+	private static class Result {
+		boolean finished;
+		int winner;
+
+		Result(boolean finished, int winner) {
+			this.finished = finished;
+			this.winner = winner;
 		}
 	}
 
