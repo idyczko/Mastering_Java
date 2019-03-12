@@ -3,8 +3,38 @@ import java.util.*;
 public class Main {
 
 	public static void main(String[] args) {
-	
+		Game g = new Game();
+		g.play();
+	}
+
+	private static class Game {
+		TicTacToe t = new TicTacToe();
 		
+		void play() {
+			Scanner sc = new Scanner(System.in);
+			while(!t.gameFinished()) {
+				printBoard();
+				int x = sc.nextInt();
+				int y = sc.nextInt();
+				t.move(new Point(x, y), 1);
+				computerMove();
+			}
+			printBoard();
+		}
+
+		void computerMove(){}
+
+		void printBoard() {
+			System.out.println("-------");
+			for (int[] row : t.board) {
+				System.out.print("|");
+				for (int cell : row) {
+					System.out.print((cell == 0 ? " " : (cell == 1 ? "X" : "O")) + "|");
+				}
+				System.out.println();
+			}
+			System.out.println("-------");
+		}
 	}
 
 	private static class TicTacToe {
@@ -17,20 +47,39 @@ public class Main {
 					possibleMoves.add(new Point(i, j));
 		}
 
+		boolean gameFinished() {
+			return this.possibleMoves.isEmpty() || this.someoneWon();
+		}
+
+		boolean someoneWon() {
+			for (int i = 0; i < 3; i++)
+				if ((this.board[i][i] != 0 && ((this.board[i][i] == this.board[i][(i + 1) % 3] && this.board[i][i] == this.board[i][(i + 2)% 3]) ||
+								(this.board[i][i] == this.board[(i + 1) % 3][i] && this.board[i][i] == this.board[(i + 2)% 3][i]))))
+						return true;
+			
+			if (this.board[0][0] != 0 && this.board[0][0] == this.board[1][1] && this.board[0][0] == this.board[2][2])
+				return true;
+
+			if (this.board[0][2] != 0 && this.board[0][2] == this.board[1][1] && this.board[0][2] == this.board[2][0])
+				return true;
+
+			return false;
+		}
+
 		void move(Point move, int player) {
 			if (!possibleMoves.contains(move) || player < 1 || player > 2)
 				throw new IllegalArgumentException();
 			
-			this.board[move.i][move.j] = player;
+			this.board[move.x][move.y] = player;
 			this.possibleMoves.remove(move);
 		}
 
-		TicTacToe copy(TicTacToe t) {
+		TicTacToe copy() {
 			TicTacToe c = new TicTacToe();
-			c.possibleMoves = new HashSet<>(t.possibleMoves);
+			c.possibleMoves = new HashSet<>(this.possibleMoves);
 			for (int i = 0; i < 3; i++)
 				for (int j = 0; j < 3; j++)
-					c.board[i][j] = t.board[i][j];
+					c.board[i][j] = this.board[i][j];
 			return c;
 		}
 	}
