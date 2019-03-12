@@ -2,8 +2,11 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 public class Main {
+	
+	private static boolean log = false;
 
 	public static void main(String[] args) {
+		log |= Arrays.asList(args).contains("-l");
 		Game g = new Game(new Human(1), new MinMax(2, 1));
 		g.play();
 	}
@@ -54,16 +57,21 @@ public class Main {
 		@Override
 		public void makeMove(Game g) {
 			TicTacToe t = g.t;
-			g.t.move(minMax(g.t, new AtomicInteger(), true, 0), id);
+			AtomicInteger leaves = new AtomicInteger();
+			AtomicInteger possibleWins = new AtomicInteger();
+			g.t.move(minMax(g.t, new AtomicInteger(), true, 0, leaves, possibleWins), id);
+			log("Leaves: " + leaves.get() + " wins: " + possibleWins.get());
 		}
 
-		Point minMax(TicTacToe t, AtomicInteger result, boolean max, int depth) {
+		Point minMax(TicTacToe t, AtomicInteger result, boolean max, int depth, AtomicInteger leaves, AtomicInteger possibleWins) {
 			if (t.gameFinished()) {
+				leaves.incrementAndGet();
 				Result r = t.boardEvaluation();
 				if (r.winner == 0) {
 					result.set(0);
 				} else if (r.winner == this.id) {
 					result.set((100 - depth)*10);
+					possibleWins.incrementAndGet();
 				} else {
 					result.set((depth - 100)*10);
 				}
@@ -76,7 +84,7 @@ public class Main {
 			for (Point move : t.possibleMoves) {
 				AtomicInteger r = new AtomicInteger();
 				points.put(move, r);
-				minMax(t.copy().move(move, max ? this.id : this.opponentsId), r, !max, depth + 1);
+				minMax(t.copy().move(move, max ? this.id : this.opponentsId), r, !max, depth + 1, leaves, possibleWins);
 			}
 
 			Optional<Map.Entry<Point, AtomicInteger>> best = max ? points.entrySet().stream().max((e1, e2) -> e1.getValue().get() - e2.getValue().get()) :
@@ -84,6 +92,11 @@ public class Main {
 			result.set(best.get().getValue().get());
 			return best.get().getKey();
 		}
+	}
+
+	private static void log(String s) {
+		if (log)
+			System.out.println(s);
 	}
 
 	private static class Human implements Player {
