@@ -20,7 +20,7 @@ public class Main {
 
 		void play() {
 			boolean p1Move = true;
-			while(!t.boardEvaluation().finished) {
+			while(!t.possibleMoves.isEmpty() && !t.boardEvaluation().finished) {
 
 				printBoard();
 				if (p1Move)
@@ -30,7 +30,7 @@ public class Main {
 				p1Move = !p1Move;
 			}
 			printBoard();
-			System.out.println("Player " + t.boardEvaluation().winner + " is the victor.");
+			System.out.println(t.boardEvaluation().winner == 0 ? "It's a draw! Congratulations to all non-artificial contestants!" : ("Player " + t.boardEvaluation().winner + " is the victor."));
 		}
 
 		void printBoard() {
