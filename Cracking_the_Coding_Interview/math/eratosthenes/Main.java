@@ -4,7 +4,45 @@ public class Main {
 
 	
 	public static void main(String[] args) {
-		sieveG(Integer.valueOf(args[0]));
+		StringBuilder stats = new StringBuilder();
+		int N = Integer.valueOf(args[0]);
+		long start = System.currentTimeMillis();
+		sieve(N);
+		long end = System.currentTimeMillis();
+		stats.append("Sieve finished. Took " + (end - start) + " millis.\n");
+		start = System.currentTimeMillis();
+		boolean p = isPrimeStupid(N);
+		end = System.currentTimeMillis();
+		stats.append("Stupid finished. Took " + (end - start) + " millis. Result: " + p + "\n");
+		start = System.currentTimeMillis();
+		p = isPrimeSlightlyBetter(N);
+		end = System.currentTimeMillis();
+		stats.append("Better finished. Took " + (end - start) + " millis. Result: " + p + "\n");
+		start = System.currentTimeMillis();
+		p = isPrimeEratosthenesSieve(N);
+		end = System.currentTimeMillis();
+		stats.append("Eratosthenes Prime Check finished. Took " + (end - start) + " millis. Result: " + p + "\n");
+		System.out.println(stats);
+	}
+
+	private static boolean isPrimeStupid(int n) {
+		for (int i = 2; i < n; i++)
+			if (n % i == 0)
+				return false;
+		return true;
+	}
+
+	private static boolean isPrimeSlightlyBetter(int n) {
+		// After the n*n the product elements start repeating in reversed order and we only care about unordered pairs.
+		for (int i = 2; i <= Math.sqrt(n); i++)
+			if (n % i == 0)
+				return false;
+		return true;
+	}
+
+	private static boolean isPrimeEratosthenesSieve(int n) {
+		List<Integer> sieve = sieve(n);
+		return sieve.get(sieve.size() - 1).equals(n);
 	}
 
 	private static void sieveG(int n) {
