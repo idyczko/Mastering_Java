@@ -6,7 +6,7 @@ public class Main {
 		f(120);	
 	}
 
-	public static void f(int i) {}
+	static public final void f(int i) {}
 
 	public static void f(int... is) {}
 }
