@@ -9,6 +9,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		int lenght = Integer.valueOf(args[0]);
+		double endProb = Double.valueOf(args[0]);
+		
 		Scanner sc = new Scanner(System.in).useDelimiter(Pattern.compile("\\s"));
 		StringBuilder key = new StringBuilder();
 		if (!sc.hasNext())
@@ -25,8 +27,31 @@ public class Main {
 			markovChain.add(key.toString().trim().toLowerCase(), next.trim().toLowerCase());
 			key.delete(0, key.indexOf(" ") + 1).append(next).append(" ");
 		}
-
-		markovChain.print();
+		
+		if (Arrays.asList(args).contains("-l"))
+			markovChain.print();
+		
+		StringBuilder sb = new StringBuilder();
+		int randomIndex = (int) (Math.random() * markovChain.chain.keySet().size());
+		int i = 0;
+		String randomKey = "";
+		for (String s : markovChain.chain.keySet()) {
+			if (++i > randomIndex) {
+				randomKey = s;
+				break;
+			}
+		}
+		String key2 = randomKey + " ";
+		sb.append(key2);
+		while (endProb > Math.random()) {
+			String next = markovChain.getNext(key2.trim());
+			if (next == null)
+				break;
+			next += " ";
+			sb.append(next);
+			key2 = key2.substring(key2.indexOf(" ") + 1) + next;
+		}
+		System.out.println(sb.toString());
 	}
 
 	private static class MarkovChain {
@@ -40,7 +65,8 @@ public class Main {
 		}
 
 		private String getNext(String key) {
-			return chain.get(key).get();
+			MarkovNode node = chain.get(key);
+			return node != null ? node.get() : null;
 		}
 
 		private void print() {
