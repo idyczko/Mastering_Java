@@ -140,7 +140,8 @@ public class PlayerBot {
     if (movesCost > MANA)
       return;
 
-    if (movesCost == MANA)
+    //if (movesCost == MANA)
+    if(!attacks.isEmpty() || !blocks.isEmpty())
       possibleMoves.add(encode(attacks) + " " + encode(blocks));
 
     if (!blocks.contains("DHK")) {
