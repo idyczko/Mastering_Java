@@ -1,9 +1,18 @@
+package net.codestrikes.adapter;
+import net.codestrikes.sdk.Area;
+import net.codestrikes.sdk.BotBase;
+import net.codestrikes.sdk.*;
+import net.codestrikes.sdk.MoveCollection;
+import net.codestrikes.sdk.RoundContext;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.*;
 import java.util.stream.*;
 
-public class PlayerBot {
-
-  private static final int MANA = 12;
+public class PlayerBot extends BotBase {
+  		private static final int MANA = 12;
   private static final Map<String, Integer> MOVES_COST;
   private static final Map<String, Integer> HIT_DAMAGE;
   private static final Map<String, Map<String, Integer>> payMatrix = new HashMap<String, Map<String, Integer>>();
@@ -11,6 +20,10 @@ public class PlayerBot {
   private static final Set<String> opMoves = new HashSet<>();
   private static final List<String> sortedMoves;
   private static int[][] matrix;
+  private static final Map<String, Area> areaMapping = new HashMap<>();
+  private static final Map<Area, String> myMapping = new HashMap<>();
+  private static final Set<String> taboo = new HashSet<>();
+  private static String lastMove = "";
 
   static {
     Map<String, Integer> temp = new HashMap<>();
@@ -22,6 +35,14 @@ public class PlayerBot {
     temp.put("DHP", 4);
     temp.put("DUP", 4);
     temp.put("DLK", 4);
+    areaMapping.put("HK", Area.HookKick);
+    areaMapping.put("HP", Area.HookPunch);
+    areaMapping.put("UP", Area.UppercutPunch);
+    areaMapping.put("LK", Area.LowKick);
+    myMapping.put(Area.HookKick, "HK");
+    myMapping.put(Area.HookPunch, "HP");
+    myMapping.put(Area.UppercutPunch, "UP");
+    myMapping.put(Area.LowKick, "LK");
     MOVES_COST = Collections.unmodifiableMap(temp);
     Map<String, Integer> temp2 = new HashMap<>();
     temp2.put("AHK", 10);
@@ -41,19 +62,52 @@ public class PlayerBot {
     }
   }
 
-  public static void main(String[] ass) {
+		public MoveCollection nextMove(RoundContext context) {
+          /*
+            Move[] ats= context.getLastOpponentMoves().getAttacks();
+            Area[] atsAr =  Arrays.stream(ats).map(a -> Area.valueOf(a.toString())).toArray(Area[]::new);
+          	Move[] blk= context.getLastOpponentMoves().getDefences();
+            Area[] blkAr =  Arrays.stream(ats).map(a -> Area.valueOf(a.toString())).toArray(Area[]::new);
 
-    /*for (int i = 0; i < temp.size(); i++) {
-      for (int j = 0; j < temp.size(); j++) {
-        System.out.print(matrix[i][j] + "\t");
-      }
-      System.out.println();
-    }*/
-    //temp.forEach(System.out::println);
-    Set<String> nasheq = findNashEquilibrium(sortedMoves, matrix, calculateTaboo());
-    //System.out.println("Nash:");
-    nasheq.forEach(System.out::println);
-  }
+			List<String> attacks = Arrays.stream(atsAr).map(a -> "A"+ myMapping.get(a)).filter(a -> a!=null && a.length() == 3).collect(Collectors.toList());
+          	Set<String> blocks = Arrays.stream(blkAr).map(a ->"D"+ myMapping.get(a)).filter(a -> a!=null && a.length() == 3).collect(Collectors.toSet());
+
+          	String opMove = encode(attacks) + " " + encode(blocks);
+            if (sortedMoves.contains(opMove))
+          		opMoves.add(opMove);*/
+          if (!"".equals(lastMove)) {
+			int result = context.getMyDamage() - context.getOpponentDamage();
+            Set<String> possibleOpMoves = new HashSet<>();
+            for (int i = 0; i < sortedMoves.size(); i++) {
+            	if (lastMove.equals(sortedMoves.get(i))) {
+                	for (int j = 0; j < sortedMoves.size(); j++) {
+                    	if (matrix[i][j] == result) {
+                        	possibleOpMoves.add(sortedMoves.get(j));
+                        }
+                    }
+                }
+            }
+            opMoves.addAll(possibleOpMoves);
+          	//if (context.getMyDamage() < context.getOpponentDamage()) {
+            	//taboo.add(lastMove);
+            //}
+          }
+
+          Set<String> nasheq = findNashEquilibrium(sortedMoves, matrix, calculateTaboo());
+          	String move = nasheq.stream().findAny().orElse("AHKAHPALKAUPAUP ");
+          	lastMove = move;
+          	List<String> at = new ArrayList<>();
+          	Set<String> bl = new HashSet<>();
+          	decode(move, at, bl);
+          	for (String attack : at) {
+            	context.getMyMoves().addAttack(areaMapping.get(attack.substring(1)));
+            }
+
+          	for (String block : bl) {
+            	context.getMyMoves().addDefence(areaMapping.get(block.substring(1)));
+            }
+			return context.getMyMoves();
+		}
 
   private static Set<String> calculateTaboo() {
     Set<String> taboo = new HashSet<>();
@@ -127,8 +181,20 @@ public class PlayerBot {
         equi.add(moves.get(i));
       }
     }
+    String best = "";
+     for (String move : equi) {
+     	if ("".equals(best) || damage(best) < damage(move)) {
+        	best = move;
+        }
+     }
     //System.out.println("Losses: " + reff + "/"+moves.size());
-    return equi;
+    return Collections.singleton(best);
+  }
+
+  private static int damage(String move) {
+  	List<String> attacks = new ArrayList<>();
+    decode(move, attacks, new HashSet<>());
+    return attacks.stream().mapToInt(a -> HIT_DAMAGE.get(a)).sum();
   }
 
   private static void fillPossibleMoves() {
@@ -140,8 +206,7 @@ public class PlayerBot {
     if (movesCost > MANA)
       return;
 
-    //if (movesCost == MANA)
-      if(!attacks.isEmpty() || !blocks.isEmpty())
+    if(!attacks.isEmpty() || !blocks.isEmpty())
       possibleMoves.add(encode(attacks) + " " + encode(blocks));
 
     if (!blocks.contains("DHK")) {
@@ -245,5 +310,4 @@ public class PlayerBot {
     moves.clear();
     moves.addAll(temp);
   }
-
 }
