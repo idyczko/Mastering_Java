@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		int lenght = Integer.valueOf(args[0]);
-		double endProb = Double.valueOf(args[0]);
+		double endProb = Double.valueOf(args[1]);
 		
 		Scanner sc = new Scanner(System.in).useDelimiter(Pattern.compile("\\s"));
 		StringBuilder key = new StringBuilder();
