@@ -31,5 +31,8 @@ public class Main {
 			case case3:
 				break;
 		}
+		int j;
+		long i;
+		for (i =0L, j = 5; i < 10 ; i++){}
 	}
 }
