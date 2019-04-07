@@ -2,6 +2,11 @@
 
 public class Main {
 
+	final static int case3 = 20;
+
+	static {
+	}
+	
 	public static void main(String[] args) {
 	
 		int x = 10;

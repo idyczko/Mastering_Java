@@ -1,5 +1,17 @@
 public class Main {
 
+	static public  final int x;
+
+	private final int y;
+	
+	static {
+		x = 10;
+	}
+
+	{
+		y = 12;
+	}
+
 	public static void main(String[] args) {
 		short s = 10;
 		byte b = 2;
@@ -19,5 +31,23 @@ public class Main {
 
 		float ff = 10;//Fine, int -> float is promoted without loss of data.
 		//float fff = 1.0;// 1.0 is interpreted as double and double -> float may be lossy!
+		
+		byte x = 10;
+		short sh = x;
+		int ii = sh + x;
+		long llll = ii + sh + x;
+		float fffff = 0.1f + llll + ii + sh + x;
+		double ddd = 0.1 + fffff + llll + ii + sh + x;
+
+		int iii = 1;
+		long lllll = 1L;
+		int iiii = 1;
+
+		float ffffff = 1f;
+		long llllll = 1L;
+		int xxx = 0xAf + 0b0101 + 012;
+		System.out.println(xxx);
+		xxx = xxx++;
+		System.out.println(xxx);
 	}
 }
