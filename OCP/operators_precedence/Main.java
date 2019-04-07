@@ -11,5 +11,21 @@ public class Main {
 		int c = 10;
 		int v = --c * c++;
 		System.out.println(y + " " + z + " " + w + " " + v);
+
+		Double d = 1.2;
+		Integer i = null;
+		System.out.println(d >= i);
+	}
+}
+
+class A {
+	public static void meth() {}
+}
+
+class B extends A {
+	public static void meth(){}
+
+	public void meth2(){
+		super.meth();
 	}
 }
