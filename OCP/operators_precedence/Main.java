@@ -15,24 +15,22 @@ public class Main {
 		int w = --z * z++;
 		int c = 10;
 		int v = --c * c++;
-		System.out.println(y + " " + z + " " + w + " " + v + " " + (false|true));
+		System.out.println(y + " " + z + " " + w + " " + v);
 
-		boolean b = false == (new Integer(0) == new Object());
-		String s = "";
-		z = true ? (x += 5) : ((short) 4);
-   		
-		final int case1 = 10;
-		final int case2 = 15;
-		switch(x) {
-			case case1:
-				break;
-			case case2:
-				break;
-			case case3:
-				break;
-		}
-		int j;
-		long i;
-		for (i =0L, j = 5; i < 10 ; i++){}
+		Double d = 1.2;
+		Integer i = null;
+		System.out.println(d >= i);
+	}
+}
+
+class A {
+	public static void meth() {}
+}
+
+class B extends A {
+	public static void meth(){}
+
+	public void meth2(){
+		super.meth();
 	}
 }
