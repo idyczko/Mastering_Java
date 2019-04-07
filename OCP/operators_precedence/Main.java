@@ -23,14 +23,28 @@ public class Main {
 	}
 }
 
-class A {
-	public static void meth() {}
+abstract class A { 
+	public final static void meth() {}
+
+	abstract void meth3();
 }
 
-class B extends A {
-	public static void meth(){}
+class B extends A implements I1, I2{
 
 	public void meth2(){
 		super.meth();
+		meth();
 	}
+
+	void meth3() {}
+
+	public void meth4() {}
+}
+
+interface I1 {
+	void meth4();
+}
+
+interface I2 {
+	default void meth4() {}
 }
