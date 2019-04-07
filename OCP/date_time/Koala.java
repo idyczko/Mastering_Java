@@ -14,4 +14,16 @@ Serializable s = (Serializable) t;
  System.out.print(canClimb.maxHeight());
  System.out.print(hasClaws.isSharp());
  }
+
+ final boolean isWaddling1() {
+   try {
+     meth();
+   } catch (FileNotFoundException e) {}
+     catch (IOException e) {}
+     catch (Exception e) {}
+
+   return true;
+ }
+
+ private static void meth() throws FileNotFoundException {}
  }
