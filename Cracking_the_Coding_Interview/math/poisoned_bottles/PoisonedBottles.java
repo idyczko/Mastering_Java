@@ -25,7 +25,7 @@ public class PoisonedBottles {
 			this.poisonedBottles = poisonedBottles;
 		}
 
-		public void submitTestPlan(List<Integer> stripesPerBottle[], int experimentDay) {
+		public void submitTestPlan(List<Integer> bottlesPerStripe[], int experimentDay) {
 			if (experimentDay < stripesByDay.size())
 				throw new IllegalArgumentException("You cannot schedule an experiment in the past.");
 			
@@ -33,7 +33,13 @@ public class PoisonedBottles {
 				stripesByDay.add(stripesByDay.isEmpty() ? createInitialStripes() : stripesByDay.get(stripesByDay.size() - 1));
 
 			
-
+			Boolean[] stripes = Arrays.copyOf(stripesByDay.get(stripesByDay.size() - 1), 10);
+			for (int i = 0; i < bottlesPerStripe.length; i++) {
+				List<Integer> bottles = bottlesPerStripe[i];
+				for (Integer bottle : bottles)
+					if (posionedBottles.contains(bottle))
+						stripes[i] = true;
+			}
 		}
 
 		public Boolean[] retrieveTestResults(int experimentDay) {
