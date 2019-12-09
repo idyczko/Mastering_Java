@@ -83,14 +83,12 @@ public class Avl {
 				}
 			}
 
-			this.depth = Math.max(this.left != null ? this.left.depth : 0, this.right != null ? this.right.depth : 0) + 1;
 
 			if (Math.abs((this.left != null ? this.left.depth : 0) - (this.right != null ? this.right.depth : 0)) > 1) {
 				System.out.println("Inbalance detected at node: " + this.value + " left depth: " + (this.left != null ? this.left.depth : 0) + " right depth: " + (this.right != null ? this.right.depth : 0));
 				this.rotate(tree);
 			}
 
-			this.depth = Math.max(this.left != null ? this.left.depth : 0, this.right != null ? this.right.depth : 0) + 1;
 
 		}
 
@@ -98,29 +96,53 @@ public class Avl {
 			this.rotateRight(tree);
 		}
 
+		void rotateLeft(AvlTree tree) {
+
+			if (this.parent == null || this != this.parent.right)
+				throw new IllegalArgumentException();
+
+			
+			if (this.parent.parent == null)
+				tree.root = this;
+			else
+				if (this.parent == this.parent.parent.left)
+					this.parent.parent.left = this;
+				else
+					this.parent.parent.right = this;
+
+			this.left = this.parent;
+			this.left.right = null;
+			this.parent = this.left.parent;
+			this.left.parent = this;
+			this.left.updateDepth();
+		}
+
 		void rotateRight(AvlTree tree) {
-			if (this.parent != null){
-				if(this == this.parent.left) {
-					this.parent.left = this.left;
-				} else {
-					this.parent.right = this.left;
-				}
-			} else {
-				tree.root = this.left;
-				this.left.parent = null;
-			}
+			if (this.parent == null || this != this.parent.left)
+				throw new IllegalArgumentException();
 
+			
+			if (this.parent.parent == null)
+				tree.root = this;
+			else
+				if (this.parent == this.parent.parent.left)
+					this.parent.parent.left = this;
+				else
+					this.parent.parent.right = this;
 
-			this.parent = this.left;
-			this.left = this.left.right;
-			this.parent.right = this;
+			this.right = this.parent;
+			this.right.left = null;
+			this.parent = this.right.parent;
+			this.right.parent = this;
+			this.right.updateDepth();
+	
+		}
 
-			if (this.left != null)
-				this.left.parent = this;
+		void updateDepth() {
+			this.depth = Math.max(this.left != null ? this.left.depth : 0, this.right != null ? this.right.depth : 0) + 1;
 
-			this.depth = Math.max(this.right != null ? this.right.depth : 0, this.left != null ? this.left.depth : 0) + 1;
-			this.parent.depth = (this.parent.left.depth > this.depth ? this.parent.left.depth : this.depth) + 1;
-
+			if (this.parent != null)
+				this.parent.updateDepth();
 		}
 		
 	}
