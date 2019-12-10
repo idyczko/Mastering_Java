@@ -13,6 +13,9 @@ public class Avl {
 			if (line.startsWith("INSERT")) {
 				String[] command = line.split(" ");
 				tree.insert(Integer.valueOf(command[1]));
+			} else if (line.startsWith("SEARCH")) {
+				String[] command = line.split(" ");
+				tree.search(Integer.valueOf(command[1]));
 			}
 		}
 	}
@@ -38,6 +41,28 @@ public class Avl {
 			}
 
 			root.insert(this, node);
+		}
+
+		void search(Integer i) {
+			search(root, i, 0);
+		}
+
+		void search(Node node, Integer i, int depth) {
+
+			if (node == null) {
+				System.out.println("The tree does not contain given node");
+				return;
+			}
+
+			if (i.equals(node.value)) {
+				System.out.println("The node " + i + " has been found on the level " + depth);
+				return;
+			}
+
+			if (i <= node.value)
+				search(node.left, i, depth + 1);
+			else
+				search(node.right, i, depth + 1);
 		}
 	}
 
@@ -89,11 +114,30 @@ public class Avl {
 				this.rotate(tree);
 			}
 
-
+			this.updateDepth();
 		}
 
 		void rotate(AvlTree tree) {
-			this.rotateRight(tree);
+			if ((this.left != null ? this.left.depth : 0) > (this.right != null ? this.right.depth : 0)) {
+				Node rotate = null;
+				if (this.left.left == null) {
+					rotate = this.left.right;
+					rotate.rotateLeft(tree);
+				} else {
+					rotate = this.left;
+				}
+				rotate.rotateRight(tree);
+			} else {
+				Node rotate = null;
+				if (this.right.right == null) {
+					rotate = this.right.left;
+					rotate.rotateRight(tree);
+				} else {
+					rotate = this.right;
+				}
+				rotate.rotateLeft(tree);
+			}
+
 		}
 
 		void rotateLeft(AvlTree tree) {
@@ -110,8 +154,12 @@ public class Avl {
 				else
 					this.parent.parent.right = this;
 
+			this.parent.right = this.left;
+			
+			if (this.left != null)
+				this.left.parent = this.parent;
+			
 			this.left = this.parent;
-			this.left.right = null;
 			this.parent = this.left.parent;
 			this.left.parent = this;
 			this.left.updateDepth();
@@ -130,8 +178,12 @@ public class Avl {
 				else
 					this.parent.parent.right = this;
 
+			this.parent.left = this.right;
+
+			if (this.right != null)
+				this.right.parent = this.parent;
+			
 			this.right = this.parent;
-			this.right.left = null;
 			this.parent = this.right.parent;
 			this.right.parent = this;
 			this.right.updateDepth();
