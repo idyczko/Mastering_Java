@@ -1,0 +1,289 @@
+Zamówienia;Błędy;Adres;Konto;Zmiany;Zwroty
+Kilka produktów;brak;gmail;Zamówienie przez konto;tak;brak
+Kilka produktów;brak;gmail;Zamówienie przez konto;tak;częściowy
+Kilka produktów;brak;gmail;Zamówienie przez konto;tak;całkowity
+Kilka produktów;brak;gmail;Zamówienie przez konto;nie;brak
+Kilka produktów;brak;gmail;Zamówienie przez konto;nie;częściowy
+Kilka produktów;brak;gmail;Zamówienie przez konto;nie;całkowity
+Kilka produktów;brak;gmail;Zamówienie jako gościni;tak;brak
+Kilka produktów;brak;gmail;Zamówienie jako gościni;tak;częściowy
+Kilka produktów;brak;gmail;Zamówienie jako gościni;tak;całkowity
+Kilka produktów;brak;gmail;Zamówienie jako gościni;nie;brak
+Kilka produktów;brak;gmail;Zamówienie jako gościni;nie;częściowy
+Kilka produktów;brak;gmail;Zamówienie jako gościni;nie;całkowity
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;tak;brak
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;nie;brak
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;brak;gmail;Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;tak;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;tak;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;tak;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;nie;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;nie;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie przez konto;nie;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;tak;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;nie;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;tak;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;tak;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;tak;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;nie;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;nie;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie przez konto;nie;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;tak;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;nie;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;tak;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;tak;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;tak;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;nie;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;nie;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie przez konto;nie;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;tak;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;nie;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Kilka produktów;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;brak;gmail;Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;brak;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;gmail;Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Literówka w mailu;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;gmail;Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Błąd w adresie;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;gmail;Zamówienie bez zalogowania;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie przez konto;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie jako gościni;nie;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;tak;całkowity
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;brak
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;częściowy
+Produkty z e-dodatkami;Błędny NIP;Inne (interia, onet, wp);Zamówienie bez zalogowania;nie;całkowity
